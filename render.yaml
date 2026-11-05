@@ -1,0 +1,37 @@
+# Render Blueprint: New → Blueprint → pick this repository. Render builds the Dockerfile and redeploys on every git push.
+# The disk keeps notebooks across deploys and restarts (disks need a paid instance; the free one forgets everything on restart).
+services:
+  - type: web
+    name: notebook-companion
+    runtime: docker
+    plan: starter
+    region: singapore
+    healthCheckPath: /api/health
+    autoDeploy: true
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: APP_ACCESS_CODE          # the code people type to open the app: choose a long one
+        sync: false
+      - key: GNANI_API_KEY
+        sync: false
+      - key: GNANI_TTS_MODEL
+        value: timbre-v3.0
+      - key: GNANI_TTS_VOICE
+        value: Shivani
+      - key: LLM_BASE_URL
+        value: https://generativelanguage.googleapis.com/v1beta/openai/
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_MODEL
+        value: gemini-3.5-flash
+      - key: LLM_REASONING_EFFORT
+        value: none
+      - key: LLM2_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: LLM2_API_KEY
+        sync: false
+      - key: LLM2_MODEL
+        value: openai/gpt-oss-120b,qwen/qwen3.8-27b

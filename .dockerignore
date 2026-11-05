@@ -1,0 +1,16 @@
+# never bake secrets or local data into the image
+.env
+backend/.env
+**/*.db
+**/*.db-*
+backend/backups/
+# rebuilt inside the image
+**/node_modules/
+frontend/dist/
+backend/.venv/
+**/__pycache__/
+frontend/.backend-port
+graphify-out/
+tests/
+undefined/
+.git/
