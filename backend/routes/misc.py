@@ -1,5 +1,5 @@
 import os, tempfile
-from flask import Blueprint, request, jsonify, Response
+from flask import Blueprint, request, jsonify, Response, g
 import config
 from db import get_db, note_row
 from services import gnani, llm, rag
@@ -37,13 +37,13 @@ def tts():
 def semantic():
     q = request.args.get("q", "").strip()
     if not q: return jsonify([])
-    db = get_db(); names = {r["id"]: r["title"] for r in db.execute("SELECT id,title FROM notes")}
+    db = get_db(); names = {r["id"]: r["title"] for r in db.execute("SELECT id,title FROM notes WHERE user_id=?", (g.uid,))}
     return jsonify([{"id": h["ref_id"], "title": names.get(h["ref_id"]), "snippet": h["chunk"][:160], "score": round(h["score"], 2)} for h in rag.search(q, k=8, db=db)])
 @bp.post("/reindex")
-def reindex(): rag.reindex_all(); return jsonify(ok=True, provider=rag.provider())
+def reindex(): rag.reindex_all(g.uid); return jsonify(ok=True, provider=rag.provider())
 @bp.get("/graph")
 def graph():
-    db = get_db(); notes = [note_row(r, False) for r in db.execute("SELECT * FROM notes WHERE archived=0")]
+    db = get_db(); notes = [note_row(r, False) for r in db.execute("SELECT * FROM notes WHERE archived=0 AND user_id=?", (g.uid,))]
     nodes, edges, tagset = [], [], {}
     for n in notes:
         nodes.append({"id": f"n{n['id']}", "type": "note", "label": n["title"], "note_id": n["id"], "category": n["category"]})

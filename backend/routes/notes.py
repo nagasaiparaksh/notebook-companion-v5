@@ -1,5 +1,5 @@
 import json
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from db import get_db, note_row, now
 from services import llm, rag, sheets as sh
 bp = Blueprint("notes", __name__)
@@ -10,7 +10,7 @@ def _reindex(nid):
 @bp.get("/notes")
 def list_notes():
     q, view = request.args.get("q", "").strip(), request.args.get("view", "active")
-    sql, args = "SELECT * FROM notes WHERE archived=?", [1 if view == "archived" else 0]
+    sql, args = "SELECT * FROM notes WHERE user_id=? AND archived=?", [g.uid, 1 if view == "archived" else 0]
     if q: sql += " AND (title LIKE ? OR content LIKE ? OR tags LIKE ? OR category LIKE ?)"; args += [f"%{q}%"] * 4
     sql += " ORDER BY pinned DESC, updated DESC"
     out = []
@@ -25,8 +25,8 @@ def create():
     d = request.json or {}; t = now(); db = get_db()
     title = d.get("title") if isinstance(d.get("title"), str) and d.get("title").strip() else "Untitled notebook"
     sheets = sh.normalize(d.get("sheets"), d.get("content", ""))
-    cur = db.execute("INSERT INTO notes(title,content,sheets,language,category,tags,created,updated) VALUES(?,?,?,?,?,?,?,?)",
-        (title, sh.content_from(sheets), json.dumps(sheets), d.get("language", "en-IN"), d.get("category", ""), json.dumps(d.get("tags", [])), t, t))
+    cur = db.execute("INSERT INTO notes(title,content,sheets,language,category,tags,created,updated,user_id) VALUES(?,?,?,?,?,?,?,?,?)",
+        (title, sh.content_from(sheets), json.dumps(sheets), d.get("language", "en-IN"), d.get("category", ""), json.dumps(d.get("tags", [])), t, t, g.uid))
     db.commit(); _reindex(cur.lastrowid)
     return jsonify(note_row(db.execute("SELECT * FROM notes WHERE id=?", (cur.lastrowid,)).fetchone())), 201
 @bp.get("/notes/<int:nid>")
@@ -36,7 +36,7 @@ def get(nid):
     n = note_row(r); n["sheets"] = sh.normalize(n.get("sheets"), n.get("content", "")); n["tasks"] = [dict(t) for t in db.execute("SELECT * FROM tasks WHERE note_id=?", (nid,))]
     try:
         rel = rag.search(f"{n['title']}. {n['summary_short']} {n['content'][:500]}", k=4, exclude=nid)
-        names = {x["id"]: x["title"] for x in db.execute("SELECT id,title FROM notes")}
+        names = {x["id"]: x["title"] for x in db.execute("SELECT id,title FROM notes WHERE user_id=?", (g.uid,))}
         n["related"] = [{"id": x["ref_id"], "title": names.get(x["ref_id"], "?"), "score": round(x["score"], 2)} for x in rel if x["score"] > 0.05]
     except Exception: n["related"] = []
     return jsonify(n)
@@ -101,9 +101,9 @@ def process_new():
     d = request.json or {}; text = (d.get("text") or "").strip()
     if not text: return jsonify(error="No text to process"), 400
     p = process_text(text, d.get("language", "en-IN")); t = now(); db = get_db()
-    cur = db.execute("INSERT INTO notes(title,content,language,category,tags,summary_short,summary_detailed,key_points,definitions,transcript,created,updated) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+    cur = db.execute("INSERT INTO notes(title,content,language,category,tags,summary_short,summary_detailed,key_points,definitions,transcript,created,updated,user_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
         (p.get("title", "Untitled"), p.get("content_html", ""), d.get("language", "en-IN"), p.get("category", ""), json.dumps(p.get("tags", [])),
-         p.get("summary_short", ""), p.get("summary_detailed", ""), json.dumps(p.get("key_points", [])), json.dumps(p.get("definitions", [])), text, t, t))
+         p.get("summary_short", ""), p.get("summary_detailed", ""), json.dumps(p.get("key_points", [])), json.dumps(p.get("definitions", [])), text, t, t, g.uid))
     nid = cur.lastrowid
     for k in p.get("tasks", []): db.execute("INSERT INTO tasks(note_id,text,deadline) VALUES(?,?,?)", (nid, k.get("text", ""), k.get("deadline", "")))
     db.commit(); _reindex(nid); return get(nid)

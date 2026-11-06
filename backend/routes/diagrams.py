@@ -1,5 +1,5 @@
 import json
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from db import get_db, now
 from services import llm, layout
 bp = Blueprint("diagrams", __name__)
@@ -62,11 +62,11 @@ def generate():
     return jsonify(title=g.get("title", "Diagram"), data=data, fallback=bool(g.get("fallback", False)))
 @bp.get("/diagrams")
 def list_():
-    return jsonify([{k: r[k] for k in ("id", "title", "svg", "updated")} for r in get_db().execute("SELECT * FROM diagrams ORDER BY updated DESC")])
+    return jsonify([{k: r[k] for k in ("id", "title", "svg", "updated")} for r in get_db().execute("SELECT * FROM diagrams WHERE user_id=? ORDER BY updated DESC", (g.uid,))])
 @bp.post("/diagrams")
 def create():
     d = request.json or {}; db = get_db(); t = now()
-    cur = db.execute("INSERT INTO diagrams(title,data,svg,created,updated) VALUES(?,?,?,?,?)", (d.get("title", "Untitled diagram"), json.dumps(d.get("data", {})), d.get("svg", ""), t, t))
+    cur = db.execute("INSERT INTO diagrams(title,data,svg,created,updated,user_id) VALUES(?,?,?,?,?,?)", (d.get("title", "Untitled diagram"), json.dumps(d.get("data", {})), d.get("svg", ""), t, t, g.uid))
     db.commit(); return jsonify(id=cur.lastrowid), 201
 @bp.get("/diagrams/<int:did>")
 def get(did):

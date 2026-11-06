@@ -95,3 +95,10 @@
 - **"I didn't catch that"** is shown when a recording comes back empty, instead of nothing happening.
 - **previous_text is only what was just said** (as Gnani's docs intend), not the end of the sheet.
 - **Requests in the middle of a sentence are carried out**: "… I am asking you to generate a diagram of photosynthesis" draws it (misheard words before the request are dropped); "draw a flowchart of the water cycle" draws the water cycle, not the current sheet.
+
+## Accounts: many people, each with their own notebooks
+- **Log in with a username and password.** New people press "New here? Create an account" and pick a username (3–32 letters, numbers, dots, dashes or underscores) and a password (6+ characters). Passwords are stored hashed; logins last 30 days. Your name and **Log out** are in the top right.
+- **Everything is private to its account:** notebooks, sheets, course material, coverage, Companion chats, diagrams, search, the notes graph, backup download / restore and the Impact numbers. Asking for someone else's notebook (by id, in a chat, a quiz, a voice command or live captions) gets "not found".
+- **Existing notebooks aren't lost:** the first account created on an existing install takes over all notebooks made before accounts existed. Every later account starts with the sample notebooks.
+- If a login runs out while you work, a "Please log in again" box appears over the page and your unsaved work stays put.
+- Hosting online: set `SECRET_KEY` in backend/.env (see .env.example). `APP_ACCESS_CODE` still works as an extra lock in front of the login.

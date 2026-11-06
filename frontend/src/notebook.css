@@ -192,3 +192,8 @@
 /* a diagram's place in the text flow (the picture itself floats exactly on top of it) */
 .page-editor .fig-space{display:block;margin:0;padding:0;user-select:none;pointer-events:none}
 .mic-lang{display:flex;align-items:center;gap:6px;background:#fff;border:1.5px solid #ccc;border-radius:12px;padding:1px 4px 1px 10px;font-size:13px}.mic-lang select{border:0;font-size:13px;background:transparent;max-width:210px}
+
+/* accounts: login page + header chip */
+.login-page{display:grid;justify-items:center;padding:28px 0}.modal.login{width:min(440px,100%)}
+.acct{display:flex;gap:6px;align-items:center;white-space:nowrap}.acct .pill{max-width:14em;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:640px){.acct .pill{display:none}}

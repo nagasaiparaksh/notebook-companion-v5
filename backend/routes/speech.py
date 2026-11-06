@@ -7,7 +7,7 @@
 - the Impact page's numbers"""
 import io, json, os, re, tempfile, threading, time, wave
 import requests
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 import config
 from db import get_db, standalone
 from services import gnani, llm, speech_context, stats
@@ -129,19 +129,19 @@ def translate():
 # ----------------------------------------------------------------------- impact numbers
 @bp.get("/stats/impact")
 def impact():
-    db = get_db(); ev = [(r["kind"], json.loads(r["data"] or "{}"), r["created"]) for r in db.execute("SELECT kind,data,created FROM events")]
+    db = get_db(); u = g.uid; ev = [(r["kind"], json.loads(r["data"] or "{}"), r["created"]) for r in db.execute("SELECT kind,data,created FROM events WHERE user_id=?", (u,))]
     stt = [d for k, d, _ in ev if k in ("stt", "stt_stream")]; cmp_ = [d for k, d, _ in ev if k == "compare"]
     langs = {}
     for d in stt:
         for c in str(d.get("language") or "").split(","):
             if c: langs[LANG_NAMES.get(c, c)] = langs.get(LANG_NAMES.get(c, c), 0) + float(d.get("seconds") or 0)
     words_notes = 0
-    for r in db.execute("SELECT content FROM notes"): words_notes += len(re.sub(r"<[^>]+>", " ", r["content"] or "").split())
-    cov = [json.loads(r["data"]).get("percent") for r in db.execute("SELECT data FROM coverage")]
+    for r in db.execute("SELECT content FROM notes WHERE user_id=?", (u,)): words_notes += len(re.sub(r"<[^>]+>", " ", r["content"] or "").split())
+    cov = [json.loads(r["data"]).get("percent") for r in db.execute("SELECT c.data FROM coverage c JOIN notes n ON n.id=c.note_id WHERE n.user_id=?", (u,))]
     days = {time.strftime("%Y-%m-%d", time.localtime(t)) for _, _, t in ev}
     return jsonify({
-        "notebooks": db.execute("SELECT count(*) FROM notes").fetchone()[0], "words_in_notes": words_notes,
-        "materials": db.execute("SELECT count(*) FROM materials").fetchone()[0],
+        "notebooks": db.execute("SELECT count(*) FROM notes WHERE user_id=?", (u,)).fetchone()[0], "words_in_notes": words_notes,
+        "materials": db.execute("SELECT count(*) FROM materials m JOIN notes n ON n.id=m.note_id WHERE n.user_id=?", (u,)).fetchone()[0],
         "speech_minutes": round(sum(float(d.get("seconds") or 0) for d in stt) / 60, 1), "speech_words": sum(int(d.get("words") or 0) for d in stt),
         "with_context_share": round(100 * sum(1 for d in stt if d.get("context")) / len(stt)) if stt else 0,
         "languages": {k: round(v / 60, 1) for k, v in sorted(langs.items(), key=lambda x: -x[1])},
@@ -186,8 +186,11 @@ def register_ws(sock):
         try: start = json.loads(ws.receive(timeout=15) or "{}")
         except Exception: return
         if not config.GNANI_API_KEY: ws.send(json.dumps({"type": "error", "message": "GNANI_API_KEY is not set in backend/.env."})); return
-        code = gnani.clean_language(start.get("language")); db = standalone()
-        try: ctx = speech_context.build(db, start.get("note_id"), _terms(start.get("terms")), start.get("previous_text") or "")
+        code = gnani.clean_language(start.get("language")); db = standalone(); nid = start.get("note_id")
+        try:
+            from auth import owns_note
+            if nid not in (None, "") and not owns_note(db, nid, g.get("uid")): nid = None     # only the signed-in account's own course terms
+            ctx = speech_context.build(db, nid, _terms(start.get("terms")), start.get("previous_text") or "")
         finally: db.close()
         lock = threading.Lock(); st = {"up": None, "opened": 0.0, "prev": ctx["previous_text"], "alive": True, "segs": 0, "secs": 0.0, "fails": 0}
         def send(o):

@@ -5,7 +5,7 @@
 - backups: automatic snapshots, plus a one-file download / restore of the whole library"""
 import html as _html, io, json, re, time, zipfile
 import xml.etree.ElementTree as ET
-from flask import Blueprint, request, jsonify, Response
+from flask import Blueprint, request, jsonify, Response, g
 from db import get_db, now
 from services import llm, rag, materials, backup, stats, sheets as sh
 bp = Blueprint("library", __name__)
@@ -232,7 +232,7 @@ def backup_now():
 def export_library():
     """Every notebook (or one, with ?note_id=) and its course material as one JSON file the person keeps."""
     db = get_db(); nid = request.args.get("note_id", type=int)
-    rows = db.execute("SELECT * FROM notes WHERE id=?", (nid,)).fetchall() if nid else db.execute("SELECT * FROM notes ORDER BY id").fetchall()
+    rows = db.execute("SELECT * FROM notes WHERE id=? AND user_id=?", (nid, g.uid)).fetchall() if nid else db.execute("SELECT * FROM notes WHERE user_id=? ORDER BY id", (g.uid,)).fetchall()
     books = []
     for r in rows:
         try: sheets = json.loads(r["sheets"] or "[]")
@@ -250,15 +250,15 @@ def import_library():
     try: data = json.loads((f.read() if f else b"").decode("utf-8"))
     except Exception: return jsonify(error="That isn't a Notebook Companion backup file (.json)."), 400
     if not isinstance(data, dict) or data.get("app") != "notebook-companion": return jsonify(error="That isn't a Notebook Companion backup file."), 400
-    db = get_db(); have = {(r["title"], r["sheets"]) for r in db.execute("SELECT title,sheets FROM notes")}; titles = {t for t, _ in have}
+    db = get_db(); have = {(r["title"], r["sheets"]) for r in db.execute("SELECT title,sheets FROM notes WHERE user_id=?", (g.uid,))}; titles = {t for t, _ in have}
     added, skipped = 0, 0
     for b in data.get("notebooks") or []:
         if not isinstance(b, dict): continue
         sheets = sh.normalize(b.get("sheets")); sj = json.dumps(sheets); title = _s(b.get("title"), 120) or "Restored notebook"
         if (title, sj) in have: skipped += 1; continue
         if title in titles: title = f"{title} (restored)"
-        t = now(); cur = db.execute("INSERT INTO notes(title,content,sheets,language,pinned,created,updated) VALUES(?,?,?,?,?,?,?)",
-                                    (title, sh.content_from(sheets), sj, _s(b.get("language"), 10) or "en-IN", 1 if b.get("pinned") else 0, b.get("created") or t, t))
+        t = now(); cur = db.execute("INSERT INTO notes(title,content,sheets,language,pinned,created,updated,user_id) VALUES(?,?,?,?,?,?,?,?)",
+                                    (title, sh.content_from(sheets), sj, _s(b.get("language"), 10) or "en-IN", 1 if b.get("pinned") else 0, b.get("created") or t, t, g.uid))
         nid = cur.lastrowid; rag.index("note", nid, f"{title}. {sh.content_from(sheets)}", db)
         for m in b.get("materials") or []:
             if not isinstance(m, dict) or not m.get("text"): continue

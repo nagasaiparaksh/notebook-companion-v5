@@ -2,7 +2,7 @@ import sqlite3, json, time
 from flask import g
 import config
 SCHEMA = """
-CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, name TEXT, language TEXT DEFAULT 'en-IN');
+CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, name TEXT, language TEXT DEFAULT 'en-IN', username TEXT, pw_hash TEXT, created REAL);
 CREATE TABLE IF NOT EXISTS notes(id INTEGER PRIMARY KEY, title TEXT, content TEXT, language TEXT DEFAULT 'en-IN',
   category TEXT DEFAULT '', tags TEXT DEFAULT '[]', summary_short TEXT DEFAULT '', summary_detailed TEXT DEFAULT '',
   key_points TEXT DEFAULT '[]', definitions TEXT DEFAULT '[]', transcript TEXT DEFAULT '', audio_ref TEXT DEFAULT '',
@@ -35,8 +35,20 @@ def init_db():
     have = {r["name"] for r in d.execute("PRAGMA table_info(materials)")}
     for col in ("pages", "pages_read"):                                                # materials from before page counts were kept
         if col not in have: d.execute(f"ALTER TABLE materials ADD COLUMN {col} INTEGER DEFAULT 0")
-    if not d.execute("SELECT 1 FROM users").fetchone(): d.execute("INSERT INTO users(name) VALUES('Friend')")
+    have = {r["name"] for r in d.execute("PRAGMA table_info(users)")}                 # accounts: username + password
+    for col, typ in (("username", "TEXT"), ("pw_hash", "TEXT"), ("created", "REAL")):
+        if col not in have: d.execute(f"ALTER TABLE users ADD COLUMN {col} {typ}")
+    d.execute("CREATE UNIQUE INDEX IF NOT EXISTS users_username ON users(username COLLATE NOCASE)")
+    for t in OWNED:                                                                    # each notebook / chat / diagram / event belongs to one account
+        if "user_id" not in {r["name"] for r in d.execute(f"PRAGMA table_info({t})")}: d.execute(f"ALTER TABLE {t} ADD COLUMN user_id INTEGER")
+        d.execute(f"CREATE INDEX IF NOT EXISTS {t}_user ON {t}(user_id)")
     d.commit(); d.close()
+OWNED = ("notes", "sessions", "diagrams", "events")
+def claim_unowned(d, uid):
+    """Notebooks made before accounts existed have no owner: they go to the first account created, so nothing is lost."""
+    n = d.execute("SELECT count(*) FROM notes WHERE user_id IS NULL").fetchone()[0]
+    for t in OWNED: d.execute(f"UPDATE {t} SET user_id=? WHERE user_id IS NULL", (uid,))
+    return n
 JSON_FIELDS = ("tags", "key_points", "definitions", "diagram_ids")
 def note_row(r, full=True):
     n = dict(r)

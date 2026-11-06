@@ -1,19 +1,20 @@
-import { useEffect, useRef, useState } from "react"; import { useNavigate } from "react-router-dom"; import { api } from "../api"; import { useApp } from "../ctx";
+import { useEffect, useRef, useState } from "react"; import { useNavigate } from "react-router-dom"; import { api } from "../api"; import { useApp } from "../ctx"; import { useUser } from "../auth";
 const COVERS = ["#FFE45C", "#C9F2DD", "#FFD0C2", "#D9D2FF", "#BFD4FF", "#FFD9C0"];
 const ago = (t: number) => { const s = Math.max(1, Math.round(Date.now() / 1000 - t)); if (s < 60) return "just now"; if (s < 3600) return `${Math.round(s / 60)} min ago`; if (s < 86400) return `${Math.round(s / 3600)} h ago`; return new Date(t * 1000).toLocaleDateString(undefined, { day: "numeric", month: "short" }); };
-const tourDone = () => { try { return localStorage.getItem("tourDone") === "1"; } catch { return false; } };
+const tourKey = (u?: string) => "tourDone" + (u ? ":" + u.toLowerCase() : "");     // per account: someone new on the same browser still gets the welcome
+const tourDone = (u?: string) => { try { return localStorage.getItem(tourKey(u)) === "1"; } catch { return false; } };
 type Backup = { dir: string; count: number; last: number | null; keep: number; every_hours: number; cloud: boolean };
 
 export default function Home() {
-  const nav = useNavigate(); const { lang } = useApp(); const [notes, setNotes] = useState<any[] | null>(null), [err, setErr] = useState(""), [msg, setMsg] = useState(""), [busy, setBusy] = useState("");
-  const [showTour, setShowTour] = useState(!tourDone()), [bk, setBk] = useState<Backup | null>(null);
+  const nav = useNavigate(); const { lang } = useApp(); const me = useUser()?.user.username; const [notes, setNotes] = useState<any[] | null>(null), [err, setErr] = useState(""), [msg, setMsg] = useState(""), [busy, setBusy] = useState("");
+  const [showTour, setShowTour] = useState(!tourDone(me)), [bk, setBk] = useState<Backup | null>(null);
   const pickDoc = useRef<HTMLInputElement>(null), pickBackup = useRef<HTMLInputElement>(null);
   const load = () => api("/notes").then(setNotes).catch((e) => { setErr(e.message); setNotes([]); });
   const loadBk = () => api("/backup/status").then(setBk).catch(() => {});
   useEffect(() => { load(); loadBk(); }, []);
   async function create() { setBusy("new"); setErr(""); try { const n = await api("/notes", { json: { title: "Untitled notebook", language: lang } }); nav(`/n/${n.id}?new=1`); } catch (e: any) { setErr(e.message); setBusy(""); } }
   async function startTour() { setBusy("tour"); setErr(""); try { const n = await api("/notes", { json: { title: "Welcome: try me", language: lang } }); nav(`/n/${n.id}?tour=1`); } catch (e: any) { setErr(e.message); setBusy(""); } }
-  const hideTour = () => { setShowTour(false); try { localStorage.setItem("tourDone", "1"); } catch {} };
+  const hideTour = () => { setShowTour(false); try { localStorage.setItem(tourKey(me), "1"); } catch {} };
   async function importDoc(f: File) {
     setBusy("doc"); setErr(""); setMsg("");
     try {

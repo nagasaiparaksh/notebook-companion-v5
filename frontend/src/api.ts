@@ -8,6 +8,7 @@ export async function api<T = any>(path: string, opts: RequestInit & { json?: an
   if (!r.ok) {
     const j = ct.includes("json") ? await r.json().catch(() => ({})) : {};
     if (r.status === 401 && j.access) window.dispatchEvent(new Event("nc-access-needed"));     // App shows the access-code screen
+    if (r.status === 401 && j.auth) window.dispatchEvent(new Event("nc-login-needed"));        // the login ran out: App asks to log in again
     throw new Error(j.error || `Request failed (${r.status})`);
   }
   return (ct.includes("json") ? r.json() : r.blob()) as any;

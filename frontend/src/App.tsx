@@ -1,6 +1,6 @@
 import { Link, Navigate, Route, Routes, useLocation, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react"; import { api } from "./api";
-import { Provider, SetupBanner, StatusPills } from "./ctx";
+import { Provider, SetupBanner, StatusPills } from "./ctx"; import { Account, AccountChip } from "./auth";
 import Home from "./pages/Home"; import Notebook from "./pages/Notebook"; import Impact from "./pages/Impact";
 import Capture from "./pages/Capture"; import Companion from "./pages/Companion"; import DiagramStudio from "./diagram/Studio"; import Garden from "./pages/Garden";
 /** Old links (/notes?open=12, /notes?new=1) keep working. */
@@ -19,10 +19,11 @@ function AccessGate() {
 }
 export default function App() {
   const onNotebook = useLocation().pathname.startsWith("/n/");
-  return <Provider><div className={"app" + (onNotebook ? " is-notebook" : "")}>
-    <header className="top"><Link className="logo" to="/">✎ my notebook</Link><StatusPills /></header>
-    <SetupBanner /><AccessGate />
+  return <div className={"app" + (onNotebook ? " is-notebook" : "")}><AccessGate />
+    <Account header={<header className="top"><Link className="logo" to="/">✎ my notebook</Link></header>}><Provider>
+    <header className="top"><Link className="logo" to="/">✎ my notebook</Link><StatusPills /><AccountChip /></header>
+    <SetupBanner />
     <Routes><Route path="/" element={<Home />} /><Route path="/n/:id" element={<Notebook />} /><Route path="/notes" element={<LegacyNotes />} />
       <Route path="/capture" element={<Capture />} /><Route path="/companion" element={<Companion />} /><Route path="/diagrams" element={<DiagramStudio />} /><Route path="/garden" element={<Garden />} /><Route path="/impact" element={<Impact />} /></Routes>
-  </div></Provider>;
+  </Provider></Account></div>;
 }

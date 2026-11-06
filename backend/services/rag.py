@@ -27,9 +27,18 @@ def index(kind, ref_id, text, db=None):
         for c, v in zip(cs, embed(cs)):
             db.execute("INSERT INTO embeddings(kind,ref_id,chunk,provider,vec) VALUES(?,?,?,?,?)", (kind, ref_id, c, provider(), json.dumps(v)))
     if own: db.commit(); db.close()
-def search(query, kind="note", k=5, db=None, exclude=None):
+OWNED_BY = {"note": "SELECT id FROM notes WHERE user_id=?",
+            "chat": "SELECT m.id FROM messages m JOIN sessions s ON s.id=m.session_id WHERE s.user_id=?"}
+def search(query, kind="note", k=5, db=None, exclude=None, uid=None):
+    """Only the given account's notes / chats (uid, else the signed-in account of the current request)."""
+    if uid is None:
+        from auth import uid as _current; uid = _current()
+    sql, args = "SELECT ref_id,chunk,vec FROM embeddings WHERE kind=? AND provider=?", [kind, provider()]
+    if kind in OWNED_BY:
+        if uid is None: return []                         # never search across accounts
+        sql += f" AND ref_id IN ({OWNED_BY[kind]})"; args.append(uid)
     own = db is None; db = db or standalone()
-    rows = db.execute("SELECT ref_id,chunk,vec FROM embeddings WHERE kind=? AND provider=?", (kind, provider())).fetchall()
+    rows = db.execute(sql, args).fetchall()
     if own: db.close()
     rows = [r for r in rows if r["ref_id"] != exclude]
     if not rows: return []
@@ -54,8 +63,9 @@ def search_chunks(query, kind, ref_ids, k=6, db=None):
     M = np.array([json.loads(r["vec"]) for r in rows], dtype=np.float32)
     sims = M @ q / (np.linalg.norm(M, axis=1) * (np.linalg.norm(q) or 1) + 1e-9)
     return [{"ref_id": rows[i]["ref_id"], "chunk": rows[i]["chunk"], "score": float(sims[i])} for i in np.argsort(-sims)[:k] if sims[i] > 0.02]
-def reindex_all():
+def reindex_all(uid=None):
     db = standalone()
-    for n in db.execute("SELECT id,title,content,summary_detailed FROM notes").fetchall():
+    rows = db.execute("SELECT id,title,content,summary_detailed FROM notes" + (" WHERE user_id=?" if uid is not None else ""), (() if uid is None else (uid,))).fetchall()
+    for n in rows:
         index("note", n["id"], f"{n['title']}. {n['content']} {n['summary_detailed']}", db)
     db.commit(); db.close()

@@ -2,6 +2,7 @@ import logging, os
 from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import db as dbm
+import auth
 from services.llm import NotConfigured
 from services.gnani import GnaniError
 from routes import notes, chat, diagrams, misc, visuals, voice, study, importer, materials, library, speech
@@ -16,6 +17,7 @@ def create_app():
         from werkzeug.middleware.proxy_fix import ProxyFix
         app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
     _access_gate(app)
+    auth.install(app)                                   # username + password accounts; each person sees only their own notebooks
     for m in (notes, chat, diagrams, misc, visuals, voice, study, importer, materials, library, speech): app.register_blueprint(m.bp, url_prefix="/api")
     mock = os.getenv("NC_MOCK") == "1"
     if mock: from services import mock as _m; _m.install(app)     # end-to-end tests only: no network, no credits
@@ -70,7 +72,7 @@ def _free_port(start):
         print(f"  port {p} is already used by another program, trying {p + 1}…")
     return start
 if __name__ == "__main__":
-    import seed; seed.run()
+    dbm.init_db()
     port = _free_port(int(os.getenv("PORT", "5050")))
     try:   # tell the Vite dev server where the backend is
         with open(os.path.join(os.path.dirname(__file__), "..", "frontend", ".backend-port"), "w") as f: f.write(str(port))

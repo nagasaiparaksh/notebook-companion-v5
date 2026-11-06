@@ -1,6 +1,6 @@
-"""Sample notes + diagrams for first-run demos. Runs only when the notes table is empty."""
+"""Sample notes + diagrams for first-run demos: every new account gets its own copy."""
 import json
-from db import init_db, standalone, now
+from db import now
 from services import layout, rag
 NOTES = [
  ("Transformers & Attention", "Deep Learning", ["transformers", "attention", "nlp"],
@@ -17,15 +17,16 @@ CNN = D("CNN architecture", [("i", "Input image", "rect"), ("c", "Convolution", 
         [("i", "c", ""), ("c", "r", ""), ("r", "p", ""), ("p", "f", ""), ("f", "fc", ""), ("fc", "o", "")])
 PHOTO = D("Photosynthesis", [("s", "Sunlight", "ellipse"), ("l", "Light reactions (thylakoid)", "rect"), ("a", "ATP + NADPH", "ellipse"), ("c", "Calvin cycle (stroma)", "rect"), ("g", "Glucose", "ellipse"), ("o", "Oxygen", "ellipse")],
         [("s", "l", "light"), ("l", "a", ""), ("l", "o", "from water"), ("a", "c", ""), ("c", "g", "CO2 fixed")])
-def run():
-    init_db(); db = standalone()
-    if db.execute("SELECT 1 FROM notes").fetchone(): db.close(); return
-    t = now()
+def for_user(db, uid):
+    """Give a new account the sample notebooks and diagrams (a fresh install used to start with these)."""
+    t = now(); ids = []
     for i, (title, cat, tags, html) in enumerate(NOTES):
-        db.execute("INSERT INTO notes(title,content,category,tags,created,updated,pinned) VALUES(?,?,?,?,?,?,?)", (title, html, cat, json.dumps(tags), t - i * 3600, t - i * 3600, 1 if i == 0 else 0))
-    for title, data in (CNN, PHOTO): db.execute("INSERT INTO diagrams(title,data,created,updated) VALUES(?,?,?,?)", (title, json.dumps(data), t, t))
-    db.execute("INSERT INTO tasks(note_id,text,deadline) VALUES(4,'Practise 5 binary search problems','Friday')")
-    db.commit(); db.close()
-    try: rag.reindex_all()
+        ids.append(db.execute("INSERT INTO notes(title,content,category,tags,created,updated,pinned,user_id) VALUES(?,?,?,?,?,?,?,?)",
+                              (title, html, cat, json.dumps(tags), t - i * 3600, t - i * 3600, 1 if i == 0 else 0, uid)).lastrowid)
+    for title, data in (CNN, PHOTO): db.execute("INSERT INTO diagrams(title,data,created,updated,user_id) VALUES(?,?,?,?,?)", (title, json.dumps(data), t, t, uid))
+    db.execute("INSERT INTO tasks(note_id,text,deadline) VALUES(?,'Practise 5 binary search problems','Friday')", (ids[3],))
+    db.commit()
+    try:
+        for nid, (title, _, _, html) in zip(ids, NOTES): rag.index("note", nid, f"{title}. {html} ", db)
+        db.commit()
     except Exception as e: print("seed indexing failed:", e)
-if __name__ == "__main__": run()

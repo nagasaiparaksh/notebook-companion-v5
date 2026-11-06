@@ -1,5 +1,5 @@
 import json, re
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from db import get_db, now
 from services import llm, rag, sheets as sh, materials
 bp = Blueprint("chat", __name__)
@@ -17,17 +17,17 @@ You get NOTE EXCERPTS (from the user's saved notes), an optional CURRENT OPEN NO
 def sessions():
     q = request.args.get("q", "").strip(); db = get_db()
     if q:
-        rows = db.execute("SELECT DISTINCT s.* FROM sessions s LEFT JOIN messages m ON m.session_id=s.id WHERE s.title LIKE ? OR m.content LIKE ? ORDER BY s.updated DESC", (f"%{q}%", f"%{q}%"))
-    else: rows = db.execute("SELECT * FROM sessions ORDER BY updated DESC")
+        rows = db.execute("SELECT DISTINCT s.* FROM sessions s LEFT JOIN messages m ON m.session_id=s.id WHERE s.user_id=? AND (s.title LIKE ? OR m.content LIKE ?) ORDER BY s.updated DESC", (g.uid, f"%{q}%", f"%{q}%"))
+    else: rows = db.execute("SELECT * FROM sessions WHERE user_id=? ORDER BY updated DESC", (g.uid,))
     return jsonify([dict(r) for r in rows])
 @bp.post("/chat/sessions")
 def new_session():
-    db = get_db(); t = now(); cur = db.execute("INSERT INTO sessions(title,created,updated) VALUES('New chat',?,?)", (t, t)); db.commit()
+    db = get_db(); t = now(); cur = db.execute("INSERT INTO sessions(title,created,updated,user_id) VALUES('New chat',?,?,?)", (t, t, g.uid)); db.commit()
     return jsonify(id=cur.lastrowid, title="New chat"), 201
 @bp.delete("/chat/sessions/<int:sid>")
 def del_session(sid):
-    db = get_db(); db.execute("DELETE FROM sessions WHERE id=?", (sid,)); db.execute("DELETE FROM messages WHERE session_id=?", (sid,))
-    db.execute("DELETE FROM embeddings WHERE kind='chat' AND ref_id IN (SELECT id FROM messages WHERE session_id=?)", (sid,)); db.commit(); return "", 204
+    db = get_db(); db.execute("DELETE FROM embeddings WHERE kind='chat' AND ref_id IN (SELECT id FROM messages WHERE session_id=?)", (sid,))
+    db.execute("DELETE FROM sessions WHERE id=?", (sid,)); db.execute("DELETE FROM messages WHERE session_id=?", (sid,)); db.commit(); return "", 204
 @bp.get("/chat/sessions/<int:sid>/messages")
 def messages(sid):
     out = []
@@ -38,13 +38,13 @@ def _plain(html_):
     import html
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", html_ or ""))).strip()
 
-def _prepare(db, sid, text, note_id, sheet_index=None, selection="", voice=False):
+def _prepare(db, uid, sid, text, note_id, sheet_index=None, selection="", voice=False):
     """Builds the LLM messages + sources. Retrieval problems never block an answer."""
     hist = db.execute("SELECT role,content FROM messages WHERE session_id=? ORDER BY id DESC LIMIT 10", (sid,)).fetchall()[::-1]
     query = text if len(text) > 40 or not hist else f"{hist[-1]['content'][:200]} {text}"
-    try: hits = rag.search(query, "note", k=4, db=db)
+    try: hits = rag.search(query, "note", k=4, db=db, uid=uid)
     except Exception as e: print("note retrieval failed:", e); hits = []
-    titles = {r["id"]: r["title"] for r in db.execute("SELECT id,title FROM notes")}
+    titles = {r["id"]: r["title"] for r in db.execute("SELECT id,title FROM notes WHERE user_id=?", (uid,))}
     excerpts = "\n\n".join(f"[note:{h['ref_id']}] \"{titles.get(h['ref_id'], '?')}\": {h['chunk']}" for h in hits if h["ref_id"] != note_id) or "(no other relevant notes found)"
     current_title = None; ctx = ""
     if note_id is not None:
@@ -60,7 +60,7 @@ def _prepare(db, sid, text, note_id, sheet_index=None, selection="", voice=False
     if note_id is not None:
         mat = materials.context(db, note_id, f"{selection[:300]} {query}".strip(), k=6, limit=5000)
         if mat: ctx += "\n\n" + mat
-    try: past = [h for h in rag.search(text, "chat", k=3, db=db) if h["score"] > 0.2]
+    try: past = [h for h in rag.search(text, "chat", k=3, db=db, uid=uid) if h["score"] > 0.2]
     except Exception: past = []
     past_txt = "\n".join("- " + h["chunk"][:300] for h in past) or "(none)"
     style = "\n\nVOICE CONVERSATION: your reply will be spoken aloud. Answer in at most 4 short plain sentences, no lists, no markdown, no note tags." if voice else ""
@@ -86,7 +86,7 @@ def send(sid):
     payload = request.json or {}; text = (payload.get("text") or "").strip(); note_id = payload.get("note_id")
     note_id = int(note_id) if note_id not in (None, "") else None
     if not text: return jsonify(error="Empty message"), 400
-    db = get_db(); msgs, hist, hits, titles, ct = _prepare(db, sid, text, note_id, payload.get("sheet_index"), (payload.get("selection") or "")[:2000], bool(payload.get("voice")))
+    db = get_db(); msgs, hist, hits, titles, ct = _prepare(db, g.uid, sid, text, note_id, payload.get("sheet_index"), (payload.get("selection") or "")[:2000], bool(payload.get("voice")))
     reply = llm.chat(msgs, max_tokens=900).strip()
     sources = _sources(hits, titles, reply, note_id, ct); _save(db, sid, text, reply, sources, len(hist) == 0)
     return jsonify(role="assistant", content=reply, sources=sources)
@@ -98,11 +98,11 @@ def stream(sid):
     note_id = int(note_id) if note_id not in (None, "") else None
     if not text: return jsonify(error="Empty message"), 400
     from db import standalone
-    db = standalone()
+    db = standalone(); uid = g.uid                       # the generator runs after the request context is gone
     def ev(o): return "data: " + json.dumps(o, ensure_ascii=False) + "\n\n"
     def gen():
         try:
-            msgs, hist, hits, titles, ct = _prepare(db, sid, text, note_id, payload.get("sheet_index"), (payload.get("selection") or "")[:2000], bool(payload.get("voice"))); parts = []
+            msgs, hist, hits, titles, ct = _prepare(db, uid, sid, text, note_id, payload.get("sheet_index"), (payload.get("selection") or "")[:2000], bool(payload.get("voice"))); parts = []
             for d in llm.stream_chat(msgs, max_tokens=900): parts.append(d); yield ev({"delta": d})
             reply = "".join(parts).strip()
             sources = _sources(hits, titles, reply, note_id, ct); _save(db, sid, text, reply, sources, len(hist) == 0)

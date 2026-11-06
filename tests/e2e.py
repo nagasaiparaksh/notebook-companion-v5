@@ -14,7 +14,7 @@ tmp = tempfile.mkdtemp(prefix="nc_e2e_"); SHOTS = os.path.join(tmp, "shots"); os
 env = {**os.environ, "DATABASE_PATH": os.path.join(tmp, "e2e.db"), "PORT": str(PORT), "BACKUP_DIR": os.path.join(tmp, "backups"), "NC_MOCK": "0" if LIVE else "1"}
 server = subprocess.Popen([os.path.join(BACK, ".venv", "Scripts", "python.exe"), "-u", "app.py"], cwd=BACK, env=env, stdout=open(os.path.join(tmp, "server.log"), "w"), stderr=subprocess.STDOUT)
 for _ in range(60):
-    try: urllib.request.urlopen(BASE + "/api/languages", timeout=2); break
+    try: urllib.request.urlopen(BASE + "/api/health", timeout=2); break
     except Exception: time.sleep(1)
 else: server.kill(); sys.exit("server did not start; see " + os.path.join(tmp, "server.log"))
 
@@ -49,6 +49,12 @@ with sync_playwright() as p:
     page.on("console", lambda m: m.type == "error" and "Failed to load resource" not in m.text and issues.append(f"console error: {m.text[:300]}"))
     page.on("response", lambda r: r.status >= 500 and issues.append(f"HTTP {r.status} {r.request.method} {r.url.replace(BASE, '')}"))
     page.on("requestfailed", lambda r: "/api/" in r.url and "ERR_ABORTED" not in str(r.failure) and issues.append(f"request failed {r.url.replace(BASE, '')}: {r.failure}"))
+
+    @check("create an account")
+    def _():
+        page.goto(BASE + "/", wait_until="networkidle"); page.get_by_role("button", name="New here? Create an account").click()
+        page.get_by_label("Username").fill("e2e_user"); page.get_by_label("Password", exact=True).fill("e2e-pass-1"); page.get_by_label("Password again").fill("e2e-pass-1")
+        page.get_by_role("button", name="Create account").click(); expect(page.locator(".acct")).to_contain_text("e2e_user")
 
     @check("home page loads")
     def _():
