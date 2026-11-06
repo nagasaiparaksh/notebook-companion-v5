@@ -189,3 +189,6 @@
 .page-editor p.q{margin:.9em 0 .3em;color:#1c3d7a}
 .page-editor pre.code{font-family:Consolas,"Cascadia Mono","Courier New",monospace;font-size:14px;line-height:1.4;background:#f6f8fa;border:1.5px solid #d0d7de;border-radius:8px;padding:8px 12px;margin:6px 0 12px;white-space:pre-wrap;overflow-wrap:anywhere;tab-size:4}
 .page-editor pre.code code{font:inherit;background:none}
+/* a diagram's place in the text flow (the picture itself floats exactly on top of it) */
+.page-editor .fig-space{display:block;margin:0;padding:0;user-select:none;pointer-events:none}
+.mic-lang{display:flex;align-items:center;gap:6px;background:#fff;border:1.5px solid #ccc;border-radius:12px;padding:1px 4px 1px 10px;font-size:13px}.mic-lang select{border:0;font-size:13px;background:transparent;max-width:210px}

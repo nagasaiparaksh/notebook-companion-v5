@@ -1,4 +1,8 @@
-export type Obj = { id: string; kind: "image" | "visual"; src: string; alt: string; x: number; y: number; w: number; h: number; meta?: any };
+/** manual = the person dragged it somewhere on purpose: it floats there. Otherwise it sits in the text flow on a .fig-space spacer
+ *  (data-fig = its id), so text never runs under it and diagrams never land on top of each other. */
+export type Obj = { id: string; kind: "image" | "visual"; src: string; alt: string; x: number; y: number; w: number; h: number; meta?: any; manual?: boolean };
+export const FIG_GAP = 18;
+export const figSpaceHtml = (id: string, h: number) => `<div class="fig-space" data-fig="${id}" contenteditable="false" style="height:${Math.round(h + FIG_GAP)}px"></div>`;
 export type Sheet = { id: string; html: string; objects: Obj[] };
 export const PAGE_W = 794, PAGE_H = 1123;
 export const uid = () => Math.random().toString(36).slice(2, 10);
@@ -90,7 +94,7 @@ export function sheetOutline(html: string, sheet: number, reuse: Reuse) {
   const walk = (n: Node) => {
     if (n.nodeType === 3) { const x = (n.textContent || "").replace(/\s+/g, " ").trim(); if (x) lines.push(x); return; }
     if (n.nodeType !== 1) return; const el = n as HTMLElement, tg = el.tagName.toLowerCase();
-    if (isNoteBox(el) || tg === "pre") { reuse.boxes.push({ html: el.outerHTML, sheet }); lines.push(`[[box ${reuse.boxes.length}]]`); return; }
+    if (isNoteBox(el) || tg === "pre" || el.classList.contains("fig-space")) { reuse.boxes.push({ html: el.outerHTML, sheet }); lines.push(`[[box ${reuse.boxes.length}]]`); return; }
     if (/^h[1-6]$/.test(tg)) { const h = headingText(el), g = headingTag(el); if (!h && !g) return; reuse.orig.set("h:" + textKey(h) + "|" + textKey(g), el.outerHTML); lines.push("## " + h + (g ? ` {tag: ${g}}` : "")); return; }
     if (tg === "ul" || tg === "ol") { Array.from(el.children).forEach((c, i) => { const x = (c.textContent || "").replace(/\s+/g, " ").trim(); if (!x) return; reuse.orig.set("li:" + textKey(x), (c as HTMLElement).innerHTML); lines.push((tg === "ol" ? `${i + 1}. ` : "- ") + x); }); return; }
     if (el.querySelector("p,div,ul,ol,h1,h2,h3,h4,blockquote")) { Array.from(el.childNodes).forEach(walk); return; }

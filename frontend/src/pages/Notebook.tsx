@@ -5,7 +5,7 @@ import { useApp } from "../ctx";
 const LANG_NAME: Record<string, string> = { "bn-IN": "Bengali", "gu-IN": "Gujarati", "hi-IN": "Hindi", "kn-IN": "Kannada", "ml-IN": "Malayalam", "mr-IN": "Marathi", "pa-IN": "Punjabi", "ta-IN": "Tamil", "te-IN": "Telugu", "en-IN": "English" };
 import { createVoiceLoop, VoiceState } from "../voice";
 import { buildLabelled, buildViz, VizResult as VR } from "../notebook/VisualizeDialog"; import FileMenu from "../notebook/FileMenu"; import VoiceSettings from "../notebook/VoiceSettings"; import { importFiles } from "../notebook/importing"; import StudyDialog, { StudyMode } from "../notebook/StudyDialog"; import ObjectLayer from "../notebook/ObjectLayer"; import SelectionBar from "../notebook/SelectionBar"; import SheetPanel from "../notebook/SheetPanel"; import MaterialsDialog, { Material, Coverage } from "../notebook/MaterialsDialog"; import LecturePanel, { LectureNotes } from "../notebook/LecturePanel"; import TourCard, { TourStep } from "../notebook/TourCard"; import VisualizeDialog, { VizResult } from "../notebook/VisualizeDialog";
-import { Obj, PAGE_H, PAGE_W, Sheet, applyColor, applyFontSize, blankSheet, caretToEnd, currentFontSize, readImage, sanitize, textToHtml, uid, escHtml, blocksToHtml, groupIntoSheets, Block, sheetOutline, Reuse, headingText, setHeadingText, textKey, noteBoxHtml, mdToHtml, isNoteBox } from "../notebook/editing";
+import { FIG_GAP, figSpaceHtml, Obj, PAGE_H, PAGE_W, Sheet, applyColor, applyFontSize, blankSheet, caretToEnd, currentFontSize, readImage, sanitize, textToHtml, uid, escHtml, blocksToHtml, groupIntoSheets, Block, sheetOutline, Reuse, headingText, setHeadingText, textKey, noteBoxHtml, mdToHtml, isNoteBox } from "../notebook/editing";
 
 type Snap = { at: number; label: string; sheets: Sheet[]; title: string; active: number };
 const TERM_STOP = new Set("This That These Those Then They There Here When What Which Where With From Also Each Some Many Most More Very Into Over Under After Before Because While Sheet Page Notes Note Unit Chapter Summary Heading Example Examples Also Other Every Their Your About".split(" "));
@@ -17,7 +17,7 @@ type Viz = { text: string; topic?: boolean; hint?: string; replace?: string; ini
 const HINTS = ["“Add a new sheet”", "“Go to sheet 2”", "“Replace the heading Speech Recognition with Speech Processing”", "“Change the current heading to Unit 2”", "“Organize my notes and remove the overlaps”", "“Add that to my notes” (after a Companion answer)", "“Read the selected text”", "“Delete this sheet” · “Delete the heading X” · “Delete this picture”", "“Undo” / “I didn’t mean that” · “Redo”", "“Add course material” (syllabus, slides, a chapter: the AI then knows the subject)", "“Record the lecture” (🎙 Lecture: a whole class → organized notes)", "“Turn this into a flowchart” (with text selected)", "“Draw a labelled diagram of the heart”", "“Show me how an amoeba looks”", "“Make the selected text red and bigger”", "“Summarize this notebook”", "“Quiz me” · “Make flashcards” · “What did I miss?”", "“What did I write about…?”", "“Read this sheet aloud” · “Stop”", "Anything else you say is written into the sheet."];
 
 export default function Notebook() {
-  const { id } = useParams(); const nav = useNavigate(); const [sp] = useSearchParams(); const { lang, languages, voice, status } = useApp();
+  const { id } = useParams(); const nav = useNavigate(); const [sp] = useSearchParams(); const { lang, setLang, languages, voice, status } = useApp();
   const [note, setNote] = useState<any>(null), [err, setErr] = useState(""), [saved, setSaved] = useState("saved");
   const sheetsRef = useRef<Sheet[]>([]), noteRef = useRef<any>(null), [, setVer] = useState(0), [thumbVer, setThumbVer] = useState(0), bump = () => setVer((v) => v + 1);
   const [active, setActive] = useState(0), activeRef = useRef(0); activeRef.current = active;
@@ -26,6 +26,7 @@ export default function Notebook() {
   const ed = useRef<HTMLDivElement>(null), stage = useRef<HTMLDivElement>(null), pageRef = useRef<HTMLDivElement>(null), titleRef = useRef<HTMLInputElement>(null), micRef = useRef<HTMLButtonElement>(null);
   const dirty = useRef(false), saveTimer = useRef<any>(0), pagTimer = useRef<any>(0), thTimer = useRef<any>(0), pendingCaret = useRef(false), caretRange = useRef<Range | null>(null), selRange = useRef<Range | null>(null);
   const lastText = useRef(0), history = useRef<Snap[]>([]), redoStack = useRef<Snap[]>([]), [, setHistVer] = useState(0);
+  const lastHeard = useRef({ text: "", at: 0 });
   const [materials, setMaterials] = useState<Material[]>([]), [matOpen, setMatOpen] = useState(false), readId = useRef(0), [coverage, setCoverage] = useState<Coverage | null>(null);
   const [lectureOpen, setLectureOpen] = useState(false), [tour, setTour] = useState(false), [lecState, setLecState] = useState("idle");
   const [orgPreview, setOrgPreview] = useState<null | { say: string; items: { i: number; id: string; before: string; after: string }[] }>(null);
@@ -75,6 +76,7 @@ export default function Notebook() {
     requestAnimationFrame(paginate);
   }, [note?.id, activeId]);
   useEffect(() => { if (note && sp.get("new") && !sp.get("tour")) titleRef.current?.select(); }, [note?.id]);
+  useLayoutEffect(() => { layoutFigures(); });
   useEffect(() => { if (note && sp.get("tour")) setTour(true); }, [note?.id]);
   useEffect(() => { const el = stage.current; if (!el) return; const ro = new ResizeObserver(() => setK(Math.min(1, Math.max(0.3, (el.clientWidth - 56) / (PAGE_W + 14))))); ro.observe(el); return () => ro.disconnect(); }, [note?.id, panelOpen, companionOpen]);
   useEffect(() => { chatEnd.current?.scrollIntoView({ block: "nearest", behavior: "smooth" }); }, [msgs, stream]);
@@ -108,6 +110,8 @@ export default function Notebook() {
     el.classList.toggle("scroll", el.scrollHeight > el.clientHeight + 2); if (!moved.length) return;
     const caretMoved = !!anchor && moved.some((n) => n === anchor || n.contains(anchor)), box = document.createElement("div"); moved.forEach((n) => box.appendChild(n));
     all[i].html = el.innerHTML; if (all[i + 1]) all[i + 1].html = box.innerHTML + all[i + 1].html; else all.splice(i + 1, 0, blankSheet(box.innerHTML));
+    const gone = new Set(Array.from(box.querySelectorAll<HTMLElement>(".fig-space")).map((x) => x.dataset.fig));    // diagrams follow their place in the text
+    if (gone.size) { const mv = all[i].objects.filter((o) => gone.has(o.id)); all[i].objects = all[i].objects.filter((o) => !gone.has(o.id)); all[i + 1].objects.push(...mv); }
     markDirty(); bump(); bumpThumbs(); if (caretMoved) { pendingCaret.current = true; setActive(i + 1); }
   }
   const onInput = () => { syncEditor(); markDirty(); bumpThumbs(); clearTimeout(pagTimer.current); pagTimer.current = setTimeout(paginate, 450); };
@@ -115,8 +119,32 @@ export default function Notebook() {
   // ---------- objects (images, visuals) ----------
   const freeSpot = (w: number, h: number) => { const el = ed.current; let y = 110; const last = el?.lastElementChild as HTMLElement | null; if (last && last.textContent?.trim()) y = last.offsetTop + last.offsetHeight + 24; return { x: Math.round((PAGE_W - w) / 2), y: Math.round(Math.max(40, Math.min(y, PAGE_H - h - 40))) }; };
   const addObj = (o: Omit<Obj, "id">) => { const obj = { ...o, id: uid() }; sheetsRef.current[activeRef.current].objects.push(obj); setSelObj(obj.id); markDirty(); bump(); bumpThumbs(); return obj; };
-  const patchObj = (oid: string, p: Partial<Obj>) => { const o = sheetsRef.current[activeRef.current]?.objects.find((x) => x.id === oid); if (!o) return; Object.assign(o, p); markDirty(); bump(); bumpThumbs(); };
-  const deleteObj = (oid: string) => { checkpoint("deleting the picture"); const s = sheetsRef.current[activeRef.current]; s.objects = s.objects.filter((o) => o.id !== oid); setSelObj(null); markDirty(); bump(); bumpThumbs(); };
+  const patchObj = (oid: string, p: Partial<Obj>) => {
+    const o = sheetsRef.current[activeRef.current]?.objects.find((x) => x.id === oid); if (!o) return;
+    if (("x" in p || "y" in p) && !("w" in p) && !o.manual) { o.manual = true; ed.current?.querySelector(`.fig-space[data-fig="${oid}"]`)?.remove(); syncEditor(); }   // moved by hand: it floats where it was put
+    Object.assign(o, p); markDirty(); bump(); bumpThumbs();
+  };
+  /** Keep every diagram / picture in the text flow on its own spacer: text goes around (above / below) it, never under it, and two
+   *  diagrams never share a spot. Objects without a spacer (new ones, older notebooks) get one where they are, then everything follows. */
+  const layoutFigures = () => {
+    const el = ed.current, s = sheetsRef.current[activeRef.current]; if (!el || !s || !s.objects.length) return; let changed = false;
+    for (const o of s.objects) {
+      if (o.manual) continue;
+      let sp = el.querySelector<HTMLElement>(`.fig-space[data-fig="${o.id}"]`);
+      if (!sp) {
+        const blocks = Array.from(el.children) as HTMLElement[], before = blocks.find((b) => b.offsetTop + Math.min(b.offsetHeight, 20) > o.y);
+        const t = document.createElement("template"); t.innerHTML = figSpaceHtml(o.id, o.h); sp = t.content.firstElementChild as HTMLElement;
+        if (before) el.insertBefore(sp, before); else el.appendChild(sp);
+        if (!sp.nextElementSibling) { const p = document.createElement("p"); p.innerHTML = "<br>"; el.appendChild(p); const r = document.createRange(); r.selectNodeContents(p); r.collapse(true); caretRange.current = r; }   // keep writing below it
+        changed = true;
+      }
+      const hh = Math.round(o.h + FIG_GAP); if (Math.abs(sp.offsetHeight - hh) > 1) { sp.style.height = hh + "px"; changed = true; }
+      const y = sp.offsetTop + Math.round(FIG_GAP / 2), x = Math.round((PAGE_W - o.w) / 2);
+      if (Math.abs(o.y - y) > 1 || (o.x !== x && o.w < PAGE_W - 40)) { o.y = y; o.x = x; changed = true; }
+    }
+    if (changed) { syncEditor(); markDirty(); bump(); bumpThumbs(); clearTimeout(pagTimer.current); pagTimer.current = setTimeout(paginate, 60); }
+  };
+  const deleteObj = (oid: string) => { checkpoint("deleting the picture"); ed.current?.querySelector(`.fig-space[data-fig="${oid}"]`)?.remove(); syncEditor(); const s = sheetsRef.current[activeRef.current]; s.objects = s.objects.filter((o) => o.id !== oid); setSelObj(null); markDirty(); bump(); bumpThumbs(); };
   // copy / cut / paste a picture or visual, also onto a different sheet
   const [hasClip, setHasClip] = useState(false), objClip = useRef<Omit<Obj, "id"> | null>(null);
   const copyObj = (oid: string, cut = false) => { const o = sheetsRef.current[activeRef.current]?.objects.find((x) => x.id === oid); if (!o) return; const { id, ...rest } = o; objClip.current = JSON.parse(JSON.stringify(rest)); setHasClip(true); if (cut) deleteObj(oid); say(cut ? "Cut. Go to any sheet and press Ctrl+V (or Paste)." : "Copied. Go to any sheet and press Ctrl+V (or Paste).", "info"); };
@@ -503,9 +531,13 @@ export default function Notebook() {
     setProcessing(true);
     try {
       const fd = new FormData(); fd.append("audio", wav, "voice.wav"); fd.append("language", noteRef.current?.language || lang);
-      fd.append("note_id", String(noteRef.current?.id || "")); fd.append("terms", JSON.stringify(ownTerms())); fd.append("previous_text", sheetText().slice(-600)); fd.append("source", "dictation");
-      let text = ""; try { text = ((await api("/audio/transcribe", { method: "POST", body: fd })).transcript || "").trim(); } catch (e: any) { if (/too short|no speech/i.test(e.message)) return; throw e; }
-      if (text.replace(/[^\p{L}\p{N}]/gu, "").length < 2) return;
+      // previous_text = only what was just said (Gnani: "the transcript of the preceding clip"); the whole sheet tail misleads it
+      const prev = Date.now() - lastHeard.current.at < 90000 ? lastHeard.current.text : "";
+      fd.append("note_id", String(noteRef.current?.id || "")); fd.append("terms", JSON.stringify(ownTerms())); fd.append("previous_text", prev); fd.append("source", "dictation");
+      const heardIn = languages.find((l) => l.code === (noteRef.current?.language || lang))?.name || "your language";
+      let text = ""; try { text = ((await api("/audio/transcribe", { method: "POST", body: fd })).transcript || "").trim(); } catch (e: any) { if (/too short|no speech/i.test(e.message)) { say(`I didn't catch that. Try again, a little closer to the mic (listening for ${heardIn}).`, "info"); return; } throw e; }
+      if (text.replace(/[^\p{L}\p{N}]/gu, "").length < 2) { say(`I didn't catch that. Try again, a little closer to the mic (listening for ${heardIn}).`, "info"); return; }
+      lastHeard.current = { text, at: Date.now() };
       await processText(text);
     } catch (e: any) { setCaption({ kind: "error", text: e.message }); } finally { setProcessing(false); }
   }
@@ -616,7 +648,9 @@ export default function Notebook() {
             <button className={"dock-mini" + (hintsOpen ? " on" : "")} onClick={() => setHintsOpen((v) => !v)} aria-pressed={hintsOpen} title="What can I say?">?<small>Help</small></button>
             {redoStack.current.length > 0 && <button className="dock-mini" onClick={doRedo} title="Redo what Undo took back (or say “redo”)">↷<small>Redo</small></button>}
           </div>
-          <div className="mic-label">{micLabel}</div>{voiceNote && <div className="mic-label" role="status" style={{ fontSize: 13, opacity: .85 }}>🔈 {voiceNote}</div>}
+          <div className="mic-label">{micLabel}</div>
+          <label className="mic-lang" title="The language the microphone listens for. English is always understood as well.">🎤 Listening for
+            <select value={note.language || lang} onChange={(e) => { setMeta({ language: e.target.value }); setLang(e.target.value); }} aria-label="Language the microphone listens for">{languages.map((l) => <option key={l.code} value={l.code}>{l.name}</option>)}</select></label>{voiceNote && <div className="mic-label" role="status" style={{ fontSize: 13, opacity: .85 }}>🔈 {voiceNote}</div>}
         </div>
       </div>
       {lectureOpen && <LecturePanel onState={setLecState} noteId={note.id} language={note.language || lang} languageName={languages.find((l) => l.code === (note.language || lang))?.name || note.language} terms={ownTerms()} hasMaterial={materials.length > 0} onClose={() => setLectureOpen(false)}

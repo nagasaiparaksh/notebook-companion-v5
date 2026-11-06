@@ -90,6 +90,22 @@ with sync_playwright() as p:
         assert editor().locator("pre.code").count() >= 1, "no code block"; assert editor().locator("p.q").count() >= 1, "no question"
         typecmd("go to sheet 1", wait_change=False)
 
+    @check("diagrams never overlap the text or each other")
+    def _():
+        typecmd("add a new sheet", wait_change=False); typecmd("Arrays store many values in one variable.")
+        for t in ("put a heading Plant cell and a diagram of the plant cell", "put a heading Heart and a diagram of the heart"):
+            n = page.locator(".obj").count(); typecmd(t, wait_change=False); idle(); page.wait_for_function(f"() => document.querySelectorAll('.obj').length > {n}", timeout=T)
+        typecmd("Each element is accessed using an index which starts from zero."); page.wait_for_timeout(600)
+        bad = page.evaluate("""() => {
+          const page = document.querySelector('.page').getBoundingClientRect(), r = (e) => e.getBoundingClientRect(), out = [];
+          const objs = [...document.querySelectorAll('.obj')].map(r);
+          const text = [...document.querySelectorAll('.page-editor > *')].filter((b) => !b.classList.contains('fig-space') && b.innerText.trim()).map((b) => { const q = document.createRange(); q.selectNodeContents(b); return q.getBoundingClientRect(); });
+          const hit = (a, b) => a.left < b.right - 2 && b.left < a.right - 2 && a.top < b.bottom - 2 && b.top < a.bottom - 2;
+          objs.forEach((a, i) => { objs.forEach((b, j) => { if (j > i && hit(a, b)) out.push('diagram ' + i + ' overlaps diagram ' + j); }); text.forEach((t, k) => { if (hit(a, t)) out.push('diagram ' + i + ' overlaps text block ' + k); }); });
+          return out; }""")
+        assert not bad, "; ".join(bad[:4])
+        typecmd("go to sheet 1", wait_change=False)
+
     @check("edit: change the current heading")
     def _(): editor().locator("h2").first.click(); typecmd("change the heading to Food From Light"); expect(editor()).to_contain_text("Food From Light")
 

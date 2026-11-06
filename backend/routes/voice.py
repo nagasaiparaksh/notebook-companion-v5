@@ -45,7 +45,13 @@ Examples: "add a new sheet" -> command new_sheet. "go to sheet three" -> command
 "replace the heading speech recognition with speech processing" -> command edit_text what heading target "speech recognition" replacement "Speech Processing". "change the current heading to Neural Networks" -> command edit_text what heading target "" replacement "Neural Networks". "replace RNN with recurrent neural network" -> command edit_text what text target "RNN" replacement "recurrent neural network". "organize my notes properly and remove the overlaps" -> command organize scope note. "tidy up this sheet" -> command organize scope sheet. "add that summary to my notes" -> command add_to_notes. "summarize this sheet and add it to my notes" -> command summarize scope sheet into notes. "read the selected text" -> command read_aloud scope selection. "delete this sheet" -> command delete what sheet target "". "remove the heading speech recognition" -> command delete what text kind heading target "speech recognition". "delete the word basically" -> command delete what words target "basically". "I didn't mean that" -> command undo."""
 
 _LEAD = r"(?:(?:please|just|ok|okay|so|and|now|hey)[, ]+)*"
-_STUDY = re.compile(r"\b(generat\w*|creat\w*|prepar\w*|writ\w*|mak\w*|giv\w*|set|draft|come up with|help me)\b[^.?!]{0,80}?\b(\d+|some|a few|few|several|three|four|five|ten)?\s*(?:[\w-]+\s+){0,3}?(questions?|answers?|examples?|exercises?|problems?|mcqs?|flashcards?|code|programs?|snippets?)\b", re.I)
+_STUDY = re.compile(r"\b(generat\w*|creat\w*|prepar\w*|writ\w*|mak\w*|giv\w*|set|draft|come up with|help me)\b[^.?!]{0,80}?\b(\d+|some|a few|few|several|three|four|five|ten)?\s*(?:[\w-]+\s+){0,3}?(questions?|answers?|examples?|exercises?|problems?|mcqs?|flashcards?|code|programs?|snippets?|diagrams?|flowcharts?|flow charts?|mind ?maps?|charts?|visuals?|infographics?|pictures?|summary|summaries|notes|headings?|bullet points?|tables?|timelines?)\b", re.I)
+def _request_part(t):
+    """Drop misheard words before the actual request: "Back to the Hollywood flea markets. Listen to me. I am asking you to generate a diagram of X" -> from the request on."""
+    parts = re.split(r"(?<=[.!?])\s+", t.strip())
+    for i, s in enumerate(parts):
+        if _STUDY.search(s) or _looks_compose(s): return " ".join(parts[i:])
+    return t
 _EDIT_VERBS = r"\b(replace|change|rename|edit|update|correct|fix|delete|remove|erase|undo|redo|organi[sz]e|reorgani[sz]e|tidy|clean up|restructure|rearrange|reorder|sort out|read)\b"
 def _looks_compose(t):
     """A request addressed to the notebook that asks for written/visual content to be made (heading, summary, diagram...)."""
@@ -132,7 +138,7 @@ def _fallback(text, ctx, safety=False):
     m = re.match(r"(?:please )?(?:draw|make|create|show|generate|give)(?: me)?(?: a| an| the)? (?:labell?ed|annotated) (?:diagram|picture|drawing|image|figure|illustration)(?: of| for)?(?: (?:a|an|the))? ?(.*)", l)
     if m: subj = m.group(1).strip(); return cmd("visualize", scope="topic" if subj and not re.fullmatch(r"(this|that|it|these|the selection|the selected text)", subj) else ("selection" if sel else "sheet"), topic=subj if not re.fullmatch(r"(this|that|it|these|the selection|the selected text)", subj) else "", kind="labelled")
     lead = r"(?:(?:please|just|ok|okay|so|and|now|hey)[, ]+)*"
-    if _looks_compose(t) or _STUDY.search(t): return cmd("compose", instruction=t)
+    if _looks_compose(t) or _STUDY.search(t): return cmd("compose", instruction=_request_part(t))
     if re.fullmatch(r"(please )?(quiz me|test me|give me a quiz|start (a |the )?quiz|quiz me on (this|my notes|this sheet|this note(book)?))", l): return cmd("study", mode="quiz", scope="sheet" if "sheet" in l else "note")
     if re.fullmatch(r"(please )?(make|create|give me|show|open)( me)?( some)? (flash ?cards)( from (this|my notes|this sheet|this note(book)?))?", l): return cmd("study", mode="flashcards", scope="sheet" if "sheet" in l else "note")
     if re.fullmatch(r"(what did i (miss|forget)|what am i missing|what('s| is) missing( from (my|this) notes?)?|check my notes for gaps)", l): return cmd("study", mode="gaps", scope="note")
@@ -140,6 +146,9 @@ def _fallback(text, ctx, safety=False):
     if m: return cmd("export", format={"docx": "word", "md": "markdown"}.get(m.group(1), m.group(1)))
     if re.search(r"\b(flowchart|mind ?map|timeline|diagram|visual|infographic)\b", l) and re.match(r"(please )?(make|create|turn|convert|draw|generate|show)", l):
         kind = "process" if "flowchart" in l else "mindmap" if re.search("mind ?map", l) else "timeline" if "timeline" in l else ""
+        m = re.search(r"\b(?:of|for|about|showing|on) (?:the |a |an |how )?(.+?)[.!?]?$", l); topic = (m.group(1).strip() if m else "")
+        if topic and not re.fullmatch(r"(this|that|it|these|this sheet|the sheet|this page|the selection|the selected text|my notes)", topic):
+            return cmd("visualize", scope="topic", topic=topic, kind=kind)         # "draw a flowchart of the water cycle"
         return cmd("visualize", scope="selection" if sel else "sheet", topic="", kind=kind)
     if re.match(r"(what|why|how|explain|tell me|quiz me|summari[sz]e)\b", l) and len(l.split()) > 2: return {"type": "question", "action": None, "args": {}, "text": t, "confidence": .6, "fallback": True}
     return None

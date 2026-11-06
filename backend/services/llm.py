@@ -151,6 +151,7 @@ def chat(messages, json_mode=False, temperature=0.4, max_tokens=None, timeout=(6
 
 def stream_chat(messages, temperature=0.4, max_tokens=None):
     r, model = _open(messages, temperature, False, max_tokens, True, (6, 60)); got = False
+    r.encoding = "utf-8"   # Groq's stream says only "text/event-stream": requests would decode it as Latin-1 and garble Telugu, Hindi, "–" …
     try:
         for line in r.iter_lines(decode_unicode=True):
             if not line or not line.startswith("data:"): continue

@@ -84,3 +84,14 @@
 - **Fixed: a spoken request was pasted as dictation** ("I have an exam tomorrow on Spring Boot … help me by generating 3 to 4 situational questions and answers"). The instant-dictation shortcut now steps aside for requests anywhere in the sentence ("help me", "generate", "questions and answers", "I need" …), and a rule recognises study-material requests even when the AI is unavailable.
 - **The notebook can now write study material**: practice / exam / situational questions with worked answers and real code blocks (monospace, kept intact by organize, exported as code in Markdown and Word). Long material goes onto its own sheets. Uses your course material when present.
 - The test suite has a check with that exact request (30 checks, 30 pass in test mode).
+
+## v8.4
+- **Fixed: Companion answers in Telugu / Hindi (and "–", narrow spaces) came out garbled** ("à°à°°à±…", "Sheetâ¯3"). Groq's stream doesn't name its text encoding, so it was decoded as Latin-1; streams are now always read as UTF-8.
+- **Fixed: diagrams overlapping each other and the text.** Every diagram / picture now takes its place in the text flow (an invisible spacer of its height), like a figure in Word: text written later goes below it, diagrams stack instead of landing on the same spot, and a diagram moves to the next sheet with its place when the page fills. Dragging one by hand makes it float exactly where you put it. Older notebooks are untangled when the sheet opens. New test: "diagrams never overlap the text or each other" (31/31 pass).
+
+## v8.5: listening fixes
+- **The listening language is shown under the mic** ("🎤 Listening for …") and can be changed there in one click (it also becomes the default for new notebooks). Notebooks had silently been set to Hindi from an old browser setting.
+- **English is always understood too**: a single Indian language (e.g. Hindi) is sent to Gnani as "Hindi + English", so English speech isn't lost.
+- **"I didn't catch that"** is shown when a recording comes back empty, instead of nothing happening.
+- **previous_text is only what was just said** (as Gnani's docs intend), not the end of the sheet.
+- **Requests in the middle of a sentence are carried out**: "… I am asking you to generate a diagram of photosynthesis" draws it (misheard words before the request are dropped); "draw a flowchart of the water cycle" draws the water cycle, not the current sheet.

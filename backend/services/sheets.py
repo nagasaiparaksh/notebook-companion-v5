@@ -21,7 +21,7 @@ def normalize(sheets, legacy_html=""):
             objs.append({"id": str(o.get("id") or _id()), "kind": o.get("kind") if o.get("kind") in ("image", "visual") else "image",
                          "src": o["src"], "alt": str(o.get("alt", ""))[:300], "x": float(o.get("x", 0) or 0), "y": float(o.get("y", 0) or 0),
                          "w": max(20.0, float(o.get("w", 300) or 300)), "h": max(20.0, float(o.get("h", 200) or 200)),
-                         "meta": o["meta"] if isinstance(o.get("meta"), dict) and len(json.dumps(o["meta"])) < 30000 else None})
+                         "meta": o["meta"] if isinstance(o.get("meta"), dict) and len(json.dumps(o["meta"])) < 30000 else None, "manual": bool(o.get("manual"))})
         out.append({"id": str(s.get("id") or _id()), "html": str(s.get("html") or ""), "objects": objs})
     return out or [{"id": _id(), "html": legacy_html or "", "objects": []}]
 

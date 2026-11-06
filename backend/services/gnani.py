@@ -40,6 +40,7 @@ def clean_language(code):
     """'te-IN,en-IN' / 'indic-auto' / 'hi-IN' -> a value Prisma v3 accepts (1-4 known codes, or indic-auto)."""
     if (code or "").strip() in ("indic-auto", "auto"): return "indic-auto"
     codes = [c.strip() for c in (code or "").split(",") if c.strip() in INDIC][:4]
+    if len(codes) == 1 and codes[0] != "en-IN": codes.append("en-IN")       # Indian students mix in English: a Hindi setting must still hear English
     return ",".join(dict.fromkeys(codes)) or "en-IN"
 
 def stt_format(code):
@@ -135,6 +136,7 @@ def synthesize_stream(text, voice, model=None, language="auto", speed=1.0, rate=
     except BaseException: _TTS_LOCK.release(); raise
     def gen():
         import base64
+        r.encoding = "utf-8"
         try:
             for line in r.iter_lines(decode_unicode=True):
                 if not line or not line.startswith("data:"): continue
