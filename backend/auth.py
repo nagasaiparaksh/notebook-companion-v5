@@ -58,10 +58,10 @@ def register():
     new_id = cur.lastrowid
     claimed = dbm.claim_unowned(db, new_id) if first else 0
     db.commit()
-    if not claimed:                                       # a brand-new account starts with the same sample notebooks a fresh install had
+    if not claimed:                                       # a brand-new account starts with one notebook: "Why use this notebook?"
         import seed
         try: seed.for_user(db, new_id)
-        except Exception as e: print("sample notebooks failed:", e)
+        except Exception as e: print("welcome notebook failed:", e)
     row = db.execute("SELECT id,username FROM users WHERE id=?", (new_id,)).fetchone(); _start(row)
     return jsonify(user=_user(row)), 201
 

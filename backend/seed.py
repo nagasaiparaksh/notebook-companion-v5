@@ -1,32 +1,36 @@
-"""Sample notes + diagrams for first-run demos: every new account gets its own copy."""
+"""What a new account starts with: one notebook that explains why to use the app. Nothing else
+(the Home page adds the guided tour and "Create new notebook" itself)."""
 import json
 from db import now
-from services import layout, rag
-NOTES = [
- ("Transformers & Attention", "Deep Learning", ["transformers", "attention", "nlp"],
-  "<h2>Attention</h2><p>Attention lets a model weigh which words matter most when reading a sentence instead of treating all words equally.</p><h2>Self-attention</h2><p>In self-attention every word in a sequence looks at every other word. Each word makes a query, key and value vector; the dot product of queries and keys gives weights over the values. This is how 'it' can be linked to 'animal' in 'The animal didn't cross the road because it was tired'.</p><h2>Multi-head</h2><p>Several attention heads run in parallel so the model can learn different relationships at once.</p>"),
- ("Convolutional Neural Networks", "Deep Learning", ["cnn", "vision", "neural-networks"],
-  "<h2>Pipeline</h2><p>An input image goes through convolution layers that slide small filters over it to detect edges and textures. ReLU adds non-linearity by zeroing negatives. Pooling shrinks feature maps and keeps the strongest signals. The result is flattened into a vector and passed to fully connected layers that output class scores.</p>"),
- ("Photosynthesis", "Biology", ["biology", "plants", "energy"],
-  "<h2>Photosynthesis</h2><p>Plants turn light energy into chemical energy in chloroplasts. Light reactions in the thylakoids split water, release oxygen and make ATP and NADPH. The Calvin cycle in the stroma uses ATP and NADPH to fix carbon dioxide into glucose.</p>"),
- ("Binary Search", "Computer Science", ["algorithms", "search"],
-  "<h2>Idea</h2><p>On a sorted array, compare the target with the middle element and discard half the range each step. Runtime is O(log n). Common bug: computing mid as (lo+hi)/2 can overflow in fixed-width integers; use lo + (hi-lo)/2.</p><ul><li>Action: practise 5 binary search problems by Friday</li></ul>"),
+from services import rag, sheets as sh
+
+TITLE = "Why use this notebook?"
+SHEETS = [
+ """<h2>Why use this notebook?</h2>
+<p>Because you can <b>talk</b> instead of type. Press the big mic and just speak: your words are written down as neat notes, in English, an Indian language, or a mix of both.</p>
+<h2>It writes for you</h2>
+<ul><li>Say <i>"put a heading Photosynthesis and a short summary"</i> and it does.</li>
+<li>Say <i>"draw a diagram of how the heart works"</i> and a labelled diagram appears on the page.</li>
+<li>Say <i>"organize my notes"</i> and repeated, messy dictation becomes clean headings and points.</li></ul>
+<h2>Edit by voice, safely</h2>
+<p>"Change the heading to Unit 2", "replace RNN with recurrent neural network", "delete the last line". Changed your mind? Say <b>"undo"</b>.</p>""",
+ """<h2>It helps you study, not just store</h2>
+<ul><li><b>Companion:</b> ask questions about your own notes and get short, spoken answers.</li>
+<li><b>🎓 Study:</b> a quiz, flashcards, or "what did I miss?" made from your notes.</li>
+<li><b>🔊 Listen:</b> any sheet or selection is read aloud, so you can revise on the go.</li></ul>
+<h2>It understands your course</h2>
+<p>Add your syllabus or slides with <b>📚 Material</b>. Technical terms are then spelled right, answers follow your course, and you can see which syllabus topics your notes still miss.</p>
+<h2>It keeps up with class</h2>
+<p><b>🎙 Lecture</b> records a whole class and turns it into organised notes with key terms.</p>
+<h2>Your notes stay yours</h2>
+<p>Your notebooks are private to your account. Export them as PDF, Word or Markdown at any time.</p>
+<p><b>Next:</b> press <b>Start the tour</b> on the home page, or <b>Create new notebook</b> and say something.</p>""",
 ]
-def D(title, nodes, edges, lay="flow"): return title, layout.build([{"id": a, "label": b, "kind": c} for a, b, c in nodes], [{"from": a, "to": b, "label": l} for a, b, l in edges], lay)
-CNN = D("CNN architecture", [("i", "Input image", "rect"), ("c", "Convolution", "rect"), ("r", "ReLU", "ellipse"), ("p", "Pooling", "rect"), ("f", "Flatten", "rect"), ("fc", "Fully connected", "rect"), ("o", "Output", "ellipse")],
-        [("i", "c", ""), ("c", "r", ""), ("r", "p", ""), ("p", "f", ""), ("f", "fc", ""), ("fc", "o", "")])
-PHOTO = D("Photosynthesis", [("s", "Sunlight", "ellipse"), ("l", "Light reactions (thylakoid)", "rect"), ("a", "ATP + NADPH", "ellipse"), ("c", "Calvin cycle (stroma)", "rect"), ("g", "Glucose", "ellipse"), ("o", "Oxygen", "ellipse")],
-        [("s", "l", "light"), ("l", "a", ""), ("l", "o", "from water"), ("a", "c", ""), ("c", "g", "CO2 fixed")])
+
 def for_user(db, uid):
-    """Give a new account the sample notebooks and diagrams (a fresh install used to start with these)."""
-    t = now(); ids = []
-    for i, (title, cat, tags, html) in enumerate(NOTES):
-        ids.append(db.execute("INSERT INTO notes(title,content,category,tags,created,updated,pinned,user_id) VALUES(?,?,?,?,?,?,?,?)",
-                              (title, html, cat, json.dumps(tags), t - i * 3600, t - i * 3600, 1 if i == 0 else 0, uid)).lastrowid)
-    for title, data in (CNN, PHOTO): db.execute("INSERT INTO diagrams(title,data,created,updated,user_id) VALUES(?,?,?,?,?)", (title, json.dumps(data), t, t, uid))
-    db.execute("INSERT INTO tasks(note_id,text,deadline) VALUES(?,'Practise 5 binary search problems','Friday')", (ids[3],))
+    t = now(); sheets = sh.normalize([{"html": h, "objects": []} for h in SHEETS]); content = sh.content_from(sheets)
+    nid = db.execute("INSERT INTO notes(title,content,sheets,category,created,updated,pinned,user_id) VALUES(?,?,?,?,?,?,?,?)",
+                     (TITLE, content, json.dumps(sheets), "Getting started", t, t, 1, uid)).lastrowid
     db.commit()
-    try:
-        for nid, (title, _, _, html) in zip(ids, NOTES): rag.index("note", nid, f"{title}. {html} ", db)
-        db.commit()
-    except Exception as e: print("seed indexing failed:", e)
+    try: rag.index("note", nid, f"{TITLE}. {content}", db); db.commit()
+    except Exception as e: print("welcome notebook indexing failed:", e)
