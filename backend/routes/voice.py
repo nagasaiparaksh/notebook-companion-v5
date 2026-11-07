@@ -60,6 +60,10 @@ def _looks_compose(t):
     return bool(asks and len(t.split()) >= 4 and re.search(r"\b(heading|title|summary|summari[sz]e|diagram|bullets?|key points|table|chart|outline|side heading|sub ?heading)\b", t, re.I))
 
 _Q = r"[\"“”'‘’]?"
+def _spoken(v, n=300):
+    """Words taken from speech: speech recognition ends every utterance with a full stop (sometimes inside the quotes:
+    `to "Food from Light."`), which must not end up in a heading or a replacement."""
+    return re.sub(r"[\s.!।\"“”'‘’]+$", "", str(v or "").strip()).lstrip("\"“”'‘’ ")[:n]
 _LANG_CODE = {"telugu": "te-IN", "hindi": "hi-IN", "tamil": "ta-IN", "kannada": "kn-IN", "malayalam": "ml-IN", "marathi": "mr-IN", "bengali": "bn-IN", "gujarati": "gu-IN", "punjabi": "pa-IN"}
 # words that can start an instruction or a question; anything else that isn't addressed to the app is note content
 _CUE = set("""can could would will please hey ok okay add put make create write insert draw show turn convert change replace rename delete remove erase undo redo
@@ -123,10 +127,10 @@ def _fallback(text, ctx, safety=False):
         return cmd("read_aloud", scope="selection" if sel else "sheet")
     m = re.fullmatch(r"(?:please |can you |could you )?(?:replace|change|rename|update|edit)\s+(?:the\s+|this\s+|my\s+)?(?:current\s+|first\s+|main\s+|top\s+|existing\s+|particular\s+)?head(?:ing|in)"
                      r"(?:\s+(?:that says|saying|called|named))?(?:\s+" + _Q + r"(.+?)" + _Q + r")?\s+(?:with|to|as|into|by)\s+(?:(?:a\s+)?new\s+(?:one|heading)\s+(?:saying|called|that says|as)?\s*)?" + _Q + r"(.+?)" + _Q + r"[.!]?", t, re.I)
-    if m: return cmd("edit_text", what="heading", target=(m.group(1) or "").strip(), replacement=m.group(2).strip())
+    if m: return cmd("edit_text", what="heading", target=_spoken(m.group(1), 200), replacement=_spoken(m.group(2)))
     if not safety:
         m = re.fullmatch(r"(?:please )?replace\s+(?:the (?:word|words|text|phrase)\s+)?" + _Q + r"(.+?)" + _Q + r"\s+with\s+" + _Q + r"(.+?)" + _Q + r"[.!]?", t, re.I)
-        if m: return cmd("edit_text", what="text", target=m.group(1).strip(), replacement=m.group(2).strip())
+        if m: return cmd("edit_text", what="text", target=_spoken(m.group(1), 200), replacement=_spoken(m.group(2)))
     m = re.fullmatch(r"(?:please |can you |could you )?(?:organi[sz]e|re-?organi[sz]e|tidy up|clean up|restructure|sort out|arrange)(?: (?:this|the|my|all(?: of)?(?: my| the)?))?(?: (sheet|page|notes?|notebook|everything))?(?: more)?(?: properly| better| neatly)?(?:,? (?:and )?(?:remove|removing|without) (?:the )?(?:overlaps?|repeats?|repetitions?|duplicates?)(?: etc)*)?", l)
     if m: return cmd("organize", scope="sheet" if (m.group(1) or "sheet") in ("sheet", "page") else "note")
     if re.fullmatch(r"(?:please )?(?:start |open |turn on )?(?:(?:record|recording) (?:the |this |my )?(?:lecture|class)|lecture mode)(?: mode)?(?: please)?", l): return cmd("lecture")
@@ -138,9 +142,10 @@ def _fallback(text, ctx, safety=False):
     m = re.match(r"(?:please )?(?:draw|make|create|show|generate|give)(?: me)?(?: a| an| the)? (?:labell?ed|annotated) (?:diagram|picture|drawing|image|figure|illustration)(?: of| for)?(?: (?:a|an|the))? ?(.*)", l)
     if m: subj = m.group(1).strip(); return cmd("visualize", scope="topic" if subj and not re.fullmatch(r"(this|that|it|these|the selection|the selected text)", subj) else ("selection" if sel else "sheet"), topic=subj if not re.fullmatch(r"(this|that|it|these|the selection|the selected text)", subj) else "", kind="labelled")
     lead = r"(?:(?:please|just|ok|okay|so|and|now|hey)[, ]+)*"
-    if _looks_compose(t) or _STUDY.search(t): return cmd("compose", instruction=_request_part(t))
+    # the exact Study phrases first: "make flashcards" opens Study > Flashcards (the broader "write me questions/flashcards about X" is compose)
     if re.fullmatch(r"(please )?(quiz me|test me|give me a quiz|start (a |the )?quiz|quiz me on (this|my notes|this sheet|this note(book)?))", l): return cmd("study", mode="quiz", scope="sheet" if "sheet" in l else "note")
     if re.fullmatch(r"(please )?(make|create|give me|show|open)( me)?( some)? (flash ?cards)( from (this|my notes|this sheet|this note(book)?))?", l): return cmd("study", mode="flashcards", scope="sheet" if "sheet" in l else "note")
+    if _looks_compose(t) or _STUDY.search(t): return cmd("compose", instruction=_request_part(t))
     if re.fullmatch(r"(what did i (miss|forget)|what am i missing|what('s| is) missing( from (my|this) notes?)?|check my notes for gaps)", l): return cmd("study", mode="gaps", scope="note")
     m = re.fullmatch(r"(?:please )?(?:export|download|save)(?: this| my)?(?: note(?:book)?)?(?: as| to)?(?: a| an)? (pdf|word|docx|markdown|md)(?: file)?", l)
     if m: return cmd("export", format={"docx": "word", "md": "markdown"}.get(m.group(1), m.group(1)))
@@ -189,7 +194,7 @@ def interpret():
         if fb and fb["type"] == "command": out.update(fb); out["overridden"] = True
     if out["type"] == "command" and out["action"] == "edit_text":
         a = out["args"]; a["what"] = "text" if a.get("what") == "text" else "heading"
-        a["target"] = str(a.get("target") or "").strip().strip("\"“”'‘’")[:200]; a["replacement"] = str(a.get("replacement") or "").strip().strip("\"“”'‘’")[:300]
+        a["target"] = _spoken(a.get("target"), 200); a["replacement"] = _spoken(a.get("replacement"))
         if not a["replacement"]: out.update(type="command", action="unsupported", args={"message": "What should the new wording be? Try: “replace the heading X with Y”."})
     if out["type"] == "command" and out["action"] == "delete":
         a = out["args"]; a["what"] = a.get("what") if a.get("what") in ("sheet", "selection", "picture", "text", "words", "notebook") else ("selection" if ctx.get("selection") else "text")

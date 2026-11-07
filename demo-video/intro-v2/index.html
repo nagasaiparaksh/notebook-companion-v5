@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>* { margin: 0; padding: 0; box-sizing: border-box; } html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #12100D; } #root { position: relative; width: 1920px; height: 1080px; }</style>
+  </head>
+  <body>
+    <!-- Stone -> leaves -> paper -> printing -> typing -> touch -> voice -> the timeline -> the notebook that listens -> Notebook Companion.
+         Narration: Gnani Timbre (Prakash). The student's line ("Explain my notes in simple words.") is the demo's user voice (Devansh). -->
+    <div id="root" data-composition-id="main" data-start="0" data-duration="48" data-width="1920" data-height="1080">
+      <div id="ancient" data-composition-id="ancient" data-composition-src="compositions/ancient.html" data-start="0" data-duration="10.8" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 1"></div>
+      <div id="paper" data-composition-id="paper" data-composition-src="compositions/paper.html" data-start="10.6" data-duration="8.6" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="modern" data-composition-id="modern" data-composition-src="compositions/modern.html" data-start="19.2" data-duration="15.9" data-track-index="3" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 3"></div>
+      <div id="timeline" data-composition-id="timeline" data-composition-src="compositions/timeline.html" data-start="35.1" data-duration="4.8" data-track-index="4" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 4"></div>
+      <div id="finale" data-composition-id="finale" data-composition-src="compositions/finale.html" data-start="39.9" data-duration="8.1" data-track-index="5" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 5"></div>
+      <audio id="vo-i01" class="clip" data-start="0.4" data-duration="4.80" data-track-index="9" data-volume="1" src="assets/vo/i01.wav"></audio>
+      <audio id="vo-i02a" class="clip" data-start="6.8" data-duration="0.69" data-track-index="9" data-volume="1" src="assets/vo/i02a.wav"></audio>
+      <audio id="vo-i02b" class="clip" data-start="8.0" data-duration="0.58" data-track-index="9" data-volume="1" src="assets/vo/i02b.wav"></audio>
+      <audio id="vo-i03a" class="clip" data-start="10.9" data-duration="0.80" data-track-index="9" data-volume="1" src="assets/vo/i03a.wav"></audio>
+      <audio id="vo-i03b" class="clip" data-start="12.1" data-duration="1.62" data-track-index="9" data-volume="1" src="assets/vo/i03b.wav"></audio>
+      <audio id="vo-i04" class="clip" data-start="15.4" data-duration="1.91" data-track-index="9" data-volume="1" src="assets/vo/i04.wav"></audio>
+      <audio id="vo-i05" class="clip" data-start="19.6" data-duration="1.34" data-track-index="9" data-volume="1" src="assets/vo/i05.wav"></audio>
+      <audio id="vo-i06a" class="clip" data-start="24.5" data-duration="1.05" data-track-index="9" data-volume="1" src="assets/vo/i06a.wav"></audio>
+      <audio id="vo-i06b" class="clip" data-start="25.9" data-duration="0.91" data-track-index="9" data-volume="1" src="assets/vo/i06b.wav"></audio>
+      <audio id="vo-i07a" class="clip" data-start="29.7" data-duration="0.46" data-track-index="9" data-volume="1" src="assets/vo/i07a.wav"></audio>
+      <audio id="vo-i07b" class="clip" data-start="30.9" data-duration="0.49" data-track-index="9" data-volume="1" src="assets/vo/i07b.wav"></audio>
+      <audio id="student" class="clip" data-start="31.6" data-duration="1.90" data-track-index="10" data-volume="1" src="assets/vo/c5.wav"></audio>
+      <audio id="vo-i08" class="clip" data-start="35.4" data-duration="2.97" data-track-index="9" data-volume="1" src="assets/vo/i08.wav"></audio>
+      <audio id="vo-i09" class="clip" data-start="40.1" data-duration="2.69" data-track-index="9" data-volume="1" src="assets/vo/i09.wav"></audio>
+      <audio id="vo-i10" class="clip" data-start="44.7" data-duration="1.41" data-track-index="9" data-volume="1" src="assets/vo/i10.wav"></audio>
+    </div>
+    <script>window.__timelines["main"] = gsap.timeline({ paused: true });</script>
+  </body>
+</html>

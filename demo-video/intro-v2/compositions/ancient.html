@@ -1,0 +1,196 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #1E1510; overflow: hidden; }
+    #a-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  </style>
+  <div id="root" data-composition-id="ancient" data-width="1920" data-height="1080">
+    <svg id="a-svg" class="clip" data-start="0" data-duration="10.8" viewBox="0 0 1920 1080" data-layout-allow-overflow>
+      <defs>
+        <radialGradient id="a-torchlight" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#FFB45C" stop-opacity="0.55" /><stop offset="0.55" stop-color="#E07B32" stop-opacity="0.16" /><stop offset="1" stop-color="#E07B32" stop-opacity="0" />
+        </radialGradient>
+        <radialGradient id="a-cavevig" cx="0.42" cy="0.45" r="0.72">
+          <stop offset="0.45" stop-color="#0E0906" stop-opacity="0" /><stop offset="1" stop-color="#0E0906" stop-opacity="0.78" />
+        </radialGradient>
+        <radialGradient id="a-sun" cx="0.3" cy="0.2" r="0.9">
+          <stop offset="0" stop-color="#FFF4D8" /><stop offset="1" stop-color="#E7CF9C" />
+        </radialGradient>
+      </defs>
+
+      <!-- ============ the cave (stone) ============ -->
+      <g id="a-cave">
+        <g id="a-cam">
+          <rect x="-600" y="-400" width="3200" height="1900" fill="#5E4636" />
+          <path d="M -200 120 L 620 60 L 900 220 L 760 520 L 320 600 L -100 480 Z" fill="#6A4F3D" />
+          <path d="M 1300 80 L 2100 140 L 2160 560 L 1700 640 L 1380 420 Z" fill="#664C3A" />
+          <path d="M 820 640 L 1500 600 L 1760 860 L 1100 940 L 700 860 Z" fill="#574131" />
+          <path d="M 300 300 L 380 420 L 360 560 M 1200 120 L 1260 260 L 1230 380 M 1640 700 L 1720 820 M 980 880 L 1060 960" stroke="#3E2D22" stroke-width="5" fill="none" stroke-linecap="round" />
+          <rect x="-600" y="930" width="3200" height="600" fill="#2C1F17" />
+          <path d="M -600 930 Q 400 900 1200 935 T 2600 925" stroke="#1E1510" stroke-width="10" fill="none" />
+          <!-- torch -->
+          <g id="a-torch">
+            <path d="M 196 470 L 214 470 L 222 640 L 188 640 Z" fill="#3B2A1E" stroke="#140D09" stroke-width="4" stroke-linejoin="round" />
+            <path id="a-flame" d="M 205 470 C 170 430 182 392 205 350 C 228 392 240 430 205 470 Z" fill="#FFC15E" stroke="#E0702A" stroke-width="5" stroke-linejoin="round" />
+            <path id="a-flame2" d="M 205 465 C 192 440 196 418 205 398 C 214 418 218 440 205 465 Z" fill="#FFF0C2" />
+          </g>
+          <circle id="a-light" cx="300" cy="460" r="1250" fill="url(#a-torchlight)" />
+          <!-- carvings: dark groove + lit edge; revealed by dashoffset -->
+          <g id="a-carvings" fill="none" stroke-linecap="round" stroke-linejoin="round"></g>
+          <!-- the carver -->
+          <g id="a-figure">
+            <path id="a-body" d="M 520 1000 L 548 760 Q 540 640 590 590 Q 640 560 690 590 Q 720 640 712 760 L 740 1000 Z" fill="#1F140E" stroke="#E79A54" stroke-opacity="0.55" stroke-width="4" stroke-linejoin="round" />
+            <path d="M 556 820 Q 630 800 706 830 L 716 900 Q 630 880 548 900 Z" fill="#3A2618" />
+            <circle cx="640" cy="528" r="58" fill="#1F140E" stroke="#E79A54" stroke-opacity="0.55" stroke-width="4" />
+            <path d="M 600 486 Q 640 452 690 486 Q 700 470 676 458 Q 640 440 604 462 Z" fill="#120B07" />
+            <path id="a-armA-o" d="M 0 0" stroke="#E79A54" stroke-opacity="0.55" stroke-width="40" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+            <path id="a-armA" d="M 0 0" stroke="#1F140E" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+            <path id="a-armB-o" d="M 0 0" stroke="#E79A54" stroke-opacity="0.55" stroke-width="40" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+            <path id="a-armB" d="M 0 0" stroke="#1F140E" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+          </g>
+          <!-- chisel hand + hammer hand (drawn over the wall) -->
+          <g id="a-chisel">
+            <path d="M 0 0 L 70 -26 L 76 -14 L 6 10 Z" fill="#9A8B7A" stroke="#140D09" stroke-width="4" stroke-linejoin="round" />
+            <ellipse cx="66" cy="-8" rx="22" ry="17" fill="#7A4E33" stroke="#140D09" stroke-width="4" />
+            <path d="M 52 -20 Q 66 -30 80 -18" stroke="#9C6A47" stroke-width="4" fill="none" stroke-linecap="round" />
+          </g>
+          <g id="a-hammer">
+            <ellipse cx="0" cy="0" rx="26" ry="20" fill="#8A7D70" stroke="#140D09" stroke-width="4" />
+            <ellipse cx="24" cy="16" rx="18" ry="15" fill="#7A4E33" stroke="#140D09" stroke-width="4" />
+          </g>
+          <g id="a-chips"></g>
+        </g>
+        <rect x="0" y="0" width="1920" height="1080" fill="url(#a-cavevig)" />
+      </g>
+
+      <!-- ============ the palm leaf ============ -->
+      <g id="a-leafscene" opacity="0">
+        <rect x="0" y="0" width="1920" height="1080" fill="url(#a-sun)" />
+        <g id="a-lcam">
+          <rect x="230" y="660" width="1500" height="22" rx="11" fill="#2B2B2B" opacity="0.12" />
+          <g id="a-leaf">
+            <rect class="leaf" x="210" y="445" width="1500" height="190" rx="40" fill="#D9B56E" stroke="#2B2B2B" stroke-width="4" />
+            <path d="M 250 470 L 1670 470 M 240 515 L 1680 515 M 240 562 L 1680 562 M 250 610 L 1670 610" stroke="#C69E55" stroke-width="2.5" opacity="0.8" />
+            <circle cx="560" cy="540" r="13" fill="#7A5A2A" stroke="#2B2B2B" stroke-width="3" />
+            <circle cx="1360" cy="540" r="13" fill="#7A5A2A" stroke="#2B2B2B" stroke-width="3" />
+            <g id="a-glyphs" fill="none" stroke="#3B2A16" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></g>
+          </g>
+          <g id="a-stylus">
+            <path d="M 0 0 L 120 -150" stroke="#2B2B2B" stroke-width="12" stroke-linecap="round" />
+            <path d="M 0 0 L 120 -150" stroke="#A9ADB5" stroke-width="6" stroke-linecap="round" />
+            <path d="M 52 -72 C 60 -96 96 -100 112 -78 C 124 -60 110 -30 86 -30 C 64 -30 46 -48 52 -72 Z" fill="#9C6B48" stroke="#2B2B2B" stroke-width="4" />
+            <path d="M 66 -64 Q 82 -78 100 -66" stroke="#7E5333" stroke-width="4" fill="none" stroke-linecap="round" />
+            <path d="M 100 -40 L 160 10 L 190 -20 L 120 -70" fill="#C98B4F" stroke="#2B2B2B" stroke-width="4" stroke-linejoin="round" />
+          </g>
+        </g>
+      </g>
+    </svg>
+  </div>
+  <script>
+    (() => {
+      const NS = "http://www.w3.org/2000/svg", $ = (id) => document.getElementById(id);
+      const mk = (tag, a, p) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); p && p.appendChild(e); return e; };
+      const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x)), lerp = (a, b, p) => a + (b - a) * p;
+      const E = { io: (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2), out: (p) => 1 - Math.pow(1 - p, 4), in3: (p) => p * p * p, lin: (p) => p };
+      const seg = (t, a, b, e = "io") => E[e](cl((t - a) / (b - a)));
+      function kf(t, keys) {
+        if (t <= keys[0][0]) return keys[0][1];
+        for (let i = 1; i < keys.length; i++) { const [t1, v1, e] = keys[i], [t0, v0] = keys[i - 1]; if (t <= t1) { const p = E[e || "io"]((t - t0) / (t1 - t0)); return Array.isArray(v0) ? v0.map((x, j) => lerp(x, v1[j], p)) : lerp(v0, v1, p); } }
+        return keys[keys.length - 1][1];
+      }
+      const hash = (n) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+
+      // ---- carvings (paths in wall coordinates) with when each is cut
+      const CARVE = [
+        { id: "sun", d: "M 1500 250 m -46 0 a 46 46 0 1 0 92 0 a 46 46 0 1 0 -92 0 M 1500 176 L 1500 150 M 1500 324 L 1500 350 M 1426 250 L 1400 250 M 1574 250 L 1600 250 M 1448 198 L 1430 180 M 1552 302 L 1570 320 M 1552 198 L 1570 180 M 1448 302 L 1430 320", a: -1, b: -0.5 },
+        { id: "spiral", d: "M 1150 780 m 0 0 a 10 10 0 1 1 20 0 a 20 20 0 1 1 -40 0 a 30 30 0 1 1 60 0 a 40 40 0 1 1 -80 0", a: -1, b: -0.5 },
+        { id: "deer", d: "M 880 560 Q 900 500 960 492 L 1080 486 Q 1130 480 1150 446 L 1170 410 M 1160 420 L 1186 388 M 1172 404 L 1204 400 M 1150 446 Q 1176 450 1194 440 M 960 492 Q 930 520 940 560 L 930 620 M 1000 500 L 1004 618 M 1060 488 L 1074 618 M 1110 486 L 1124 610 M 880 560 L 868 540", a: 0.1, b: 3.75 },
+        { id: "hand", d: "M 1640 640 L 1640 560 M 1660 640 L 1664 548 M 1680 640 L 1688 556 M 1700 646 L 1712 576 M 1630 650 L 1600 610 M 1630 650 Q 1666 700 1708 650 L 1700 646", a: -1, b: -0.5 },
+        { id: "hunters", d: "M 1380 700 m -10 -70 a 10 10 0 1 0 20 0 a 10 10 0 1 0 -20 0 M 1380 640 L 1380 690 L 1366 730 M 1380 690 L 1396 730 M 1380 656 L 1356 676 M 1380 656 L 1410 640 L 1470 600 M 1460 700 m -10 -70 a 10 10 0 1 0 20 0 a 10 10 0 1 0 -20 0 M 1460 640 L 1460 690 L 1446 730 M 1460 690 L 1476 730 M 1460 656 L 1490 640 L 1540 610", a: 4.9, b: 6.5 },
+      ];
+      const cg = $("a-carvings");
+      CARVE.forEach((c) => {
+        c.dark = mk("path", { d: c.d, stroke: "#2A1D15", "stroke-width": 11, pathLength: 1, "stroke-dasharray": 1, "stroke-dashoffset": 1 }, cg);
+        c.lit = mk("path", { d: c.d, stroke: "#C9A27E", "stroke-width": 4.5, pathLength: 1, "stroke-dasharray": 1, "stroke-dashoffset": 1, transform: "translate(-2 -2)" }, cg);
+      });
+      const chips = []; for (let i = 0; i < 24; i++) chips.push(mk("path", { d: "M 0 -4 L 5 2 L -3 4 Z", fill: "#C9A27E", stroke: "#2A1D15", "stroke-width": 1.5, opacity: 0 }, $("a-chips")));
+
+      // ---- palm-leaf script: three rows of glyphs (row 1 already written, row 2 written by the stylus)
+      const ROWS = [492, 540, 588], G0 = 262, G1 = 1660, GW = 34, glyphs = [];
+      ROWS.forEach((y, r) => {
+        for (let x = G0, k = 0; x < G1; x += GW, k++) {
+          if (Math.abs(x - 560) < 30 || Math.abs(x - 1360) < 30) continue;
+          const s = r * 1000 + k, h = (n) => hash(s * 7 + n);
+          const base = [`M ${x} ${y + 8} q 4 -20 14 -14 q 8 6 0 16`, `M ${x} ${y - 10} l 0 20 q 10 4 16 -6`, `M ${x + 2} ${y + 8} a 8 9 0 1 1 12 -2`, `M ${x} ${y - 6} q 8 -8 16 0 q -8 8 0 16`, `M ${x} ${y + 6} q 8 -24 18 -6`, `M ${x} ${y - 8} q 18 0 8 10 q -10 8 10 8`][Math.floor(h(1) * 6)];
+          const top = [` m -2 -22 q 8 -6 14 0`, ` m -8 -26 l 6 -6`, ``, ` m -4 -24 a 4 4 0 1 0 0.1 0`][Math.floor(h(2) * 4)];
+          const tail = h(3) > 0.6 ? ` m 2 4 l 6 10` : h(3) > 0.3 ? ` m -10 6 q 6 6 12 0` : ``;
+          let d = base + top + tail;
+          glyphs.push({ el: mk("path", { d, opacity: 0 }, $("a-glyphs")), row: r, x });
+        }
+      });
+
+      const SH_A = [640, 610], SH_B = [612, 616];          // the carver's shoulders
+      function armPath(S, H, bend) { const mx = (S[0] + H[0]) / 2, my = (S[1] + H[1]) / 2 + bend; return `M ${S[0]} ${S[1]} Q ${mx} ${my} ${H[0]} ${H[1]}`; }
+      CARVE.forEach((c) => { const L = c.dark.getTotalLength(); c.pts = []; for (let i = 0; i <= 300; i++) { const q = c.dark.getPointAtLength((i / 300) * L); c.pts.push([q.x, q.y]); } });
+      function tipOf(c, p) { const f = cl(p) * 300, i = Math.min(299, Math.floor(f)), a = c.pts[i], b = c.pts[i + 1], u = f - i; return [lerp(a[0], b[0], u), lerp(a[1], b[1], u)]; }
+
+      function render(t) {
+        // ---------- cave
+        const flick = 0.82 + 0.1 * Math.sin(t * 13.1) + 0.06 * Math.sin(t * 31.7 + 1) + 0.04 * Math.sin(t * 57.3);
+        $("a-light").setAttribute("opacity", flick);
+        $("a-flame").setAttribute("transform", `translate(205 470) scale(${0.94 + 0.08 * Math.sin(t * 17)} ${0.92 + 0.12 * Math.sin(t * 11.3 + 0.6)}) translate(-205 -470)`);
+        const cam = kf(t, [[0, [1, 960, 540]], [1.6, [1.08, 960, 540], "io"], [3.6, [2.7, 1010, 500], "io"], [3.9, [2.6, 1030, 500]], [6.4, [2.15, 1500, 560], "io"], [7.2, [2.6, 1520, 560], "in3"]]);
+        $("a-cam").setAttribute("transform", `translate(960 540) scale(${cam[0]}) translate(${-cam[1]} ${-cam[2]})`);
+        CARVE.forEach((c) => { const p = c.a < 0 ? 1 : seg(t, c.a, c.b, "lin"); c.dark.setAttribute("stroke-dashoffset", 1 - p); c.lit.setAttribute("stroke-dashoffset", 1 - p); });
+        // the chisel follows the cut being made: the deer, then (after a move) the hunters
+        const deer = CARVE[2], hunt = CARVE[4];
+        let tip;
+        if (t < 3.75) tip = tipOf(deer, seg(t, 0.1, 3.75, "lin"));
+        else if (t < 4.9) { const a = tipOf(deer, 1), b = tipOf(hunt, 0), p = seg(t, 3.9, 4.85, "io"); tip = [lerp(a[0], b[0], p), lerp(a[1], b[1], p) - 30 * Math.sin(Math.PI * p)]; }
+        else tip = tipOf(hunt, seg(t, 4.9, 6.5, "lin"));
+        const period = 0.42, ph = (t % period) / period, working = t > 0.1 && (t < 3.8 || t > 4.9) && t < 6.6;
+        const wind = working ? (ph < 0.75 ? E.io(ph / 0.75) : 1 - E.in3((ph - 0.75) / 0.25)) : 0.4;
+        $("a-chisel").setAttribute("transform", `translate(${tip[0]} ${tip[1]}) rotate(-8)`);
+        const hb = [tip[0] + 96 + 30 * wind, tip[1] - 2 - 60 * wind];
+        $("a-hammer").setAttribute("transform", `translate(${hb[0]} ${hb[1]}) rotate(${-30 * wind})`);
+        // the carver's arms reach to the chisel and the hammer
+        // the carver stands an arm's length from the chisel (steps along as the carving grows); arms are drawn in the figure's own space
+        const dx = cl(tip[0] - 300 - SH_A[0], 120, 760), dy = cl((tip[1] - 520) * 0.25, -20, 40);
+        const handA = [tip[0] + 66 - dx, tip[1] - 8 - dy], handB = [hb[0] + 20 - dx, hb[1] + 14 - dy];
+        $("a-armA").setAttribute("d", armPath(SH_A, handA, 46)); $("a-armA-o").setAttribute("d", armPath(SH_A, handA, 46));
+        $("a-armB").setAttribute("d", armPath(SH_B, handB, 24)); $("a-armB-o").setAttribute("d", armPath(SH_B, handB, 24));
+        $("a-figure").setAttribute("transform", `translate(${dx} ${dy})`);
+        // stone chips at every strike
+        chips.forEach((c, i) => {
+          const k = Math.floor(i / 4), strikeT = Math.floor(t / period) * period - k * period, age = t - strikeT;
+          if (!working || age < 0 || age > 0.5 || strikeT < 0.1) { c.setAttribute("opacity", 0); return; }
+          const n = Math.floor(strikeT / period) * 4 + (i % 4), ang = -0.6 - hash(n) * 2.2, sp = 160 + hash(n + 9) * 140;
+          const x = tip[0] + Math.cos(ang) * sp * age, y = tip[1] + Math.sin(ang) * sp * age + 420 * age * age;
+          c.setAttribute("opacity", 1 - age / 0.5); c.setAttribute("transform", `translate(${x} ${y}) rotate(${age * 720 + n * 40}) scale(${0.6 + hash(n + 3)})`);
+        });
+        // ---------- stone -> leaf: the cave blurs away, the leaf grows out of it
+        const out = seg(t, 6.55, 7.3, "in3"), lin = seg(t, 6.75, 7.55, "out");
+        $("a-cave").setAttribute("opacity", 1 - out); $("a-cave").style.filter = out > 0 ? `blur(${out * 12}px)` : "none";
+        $("a-leafscene").setAttribute("opacity", lin);
+        $("a-leaf").setAttribute("transform", `translate(960 540) scale(${0.25 + 0.75 * lin} ${0.6 + 0.4 * lin}) translate(-960 -540)`);
+        // stylus writes row 2, the camera follows it, then pulls back to the whole leaf
+        const sx = lerp(G0, G1 - 20, seg(t, 7.5, 9.85, "lin")), wiggle = Math.sin(t * 46) * 6;
+        const lcam = kf(t, [[0, [1.35, 960, 540]], [7.4, [1.35, 960, 540]], [7.7, [1.75, 560, 540], "io"], [9.85, [1.75, 1380, 540], "lin"], [10.6, [1, 960, 540], "io"]]);
+        const camX = t >= 7.6 && t < 9.85 ? lerp(lcam[1], cl(sx + 120, 560, 1380), 0.85) : lcam[1];
+        $("a-lcam").setAttribute("transform", `translate(960 540) scale(${lcam[0]}) translate(${-camX} ${-lcam[2]})`);
+        glyphs.forEach((g) => {
+          let o = 0;
+          if (g.row === 0) o = seg(t, 6.95 + (g.x - G0) / 2600, 7.25 + (g.x - G0) / 2600, "out");       // the first row arrives from the carvings
+          else if (g.row === 1) o = t >= 7.5 && sx >= g.x + 14 ? 1 : 0;
+          else o = seg(t, 9.9 + (g.x - G0) / 4000, 10.15 + (g.x - G0) / 4000, "out") * 0.95;
+          g.el.setAttribute("opacity", o);
+        });
+        const writing = t >= 7.5 && t < 9.85, styT = writing ? [sx + 12, ROWS[1] - 2 + wiggle * 0.5] : t < 7.5 ? [G0 - 60, ROWS[1] - 60] : [G1 + 60, ROWS[1] - 90 - 120 * seg(t, 9.85, 10.4)];
+        $("a-stylus").setAttribute("transform", `translate(${styT[0]} ${styT[1]})`); $("a-stylus").setAttribute("opacity", seg(t, 7.2, 7.5) * (1 - seg(t, 10.0, 10.4)));
+      }
+      const tl = gsap.timeline({ paused: true }), clock = { t: 0 };
+      tl.to(clock, { t: 10.8, duration: 10.8, ease: "none", onUpdate: () => render(clock.t) }, 0);
+      render(0);
+      window.__timelines["ancient"] = tl;
+    })();
+  </script>
+</template>

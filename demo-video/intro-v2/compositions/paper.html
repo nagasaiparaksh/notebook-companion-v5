@@ -1,0 +1,221 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #E7CF9C; overflow: hidden; }
+    #p-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  </style>
+  <div id="root" data-composition-id="paper" data-width="1920" data-height="1080">
+    <svg id="p-svg" class="clip" data-start="0" data-duration="8.6" viewBox="0 0 1920 1080" data-layout-allow-overflow>
+      <defs>
+        <radialGradient id="p-sun" cx="0.3" cy="0.2" r="0.9"><stop offset="0" stop-color="#FFF4D8" /><stop offset="1" stop-color="#E7CF9C" /></radialGradient>
+        <radialGradient id="p-candle" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#FFD58A" stop-opacity="0.5" /><stop offset="1" stop-color="#FFD58A" stop-opacity="0" /></radialGradient>
+        <radialGradient id="p-vig" cx="0.5" cy="0.5" r="0.75"><stop offset="0.55" stop-color="#1A100A" stop-opacity="0" /><stop offset="1" stop-color="#1A100A" stop-opacity="0.55" /></radialGradient>
+        <linearGradient id="p-window" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE7B0" stop-opacity="0.55" /><stop offset="1" stop-color="#FFE7B0" stop-opacity="0" /></linearGradient>
+      </defs>
+
+      <!-- ===== the scribe's desk (top-down) ===== -->
+      <g id="p-desk">
+        <rect x="0" y="0" width="1920" height="1080" fill="url(#p-sun)" />
+        <rect id="p-wood" x="0" y="0" width="1920" height="1080" fill="#8A5E3E" opacity="0" />
+        <g id="p-dcam">
+          <g id="p-deskthings" opacity="0">
+            <path d="M -400 200 Q 600 180 2400 214 M -400 520 Q 800 500 2400 540 M -400 860 Q 900 840 2400 880" stroke="#7A5134" stroke-width="5" fill="none" />
+            <!-- candle -->
+            <ellipse cx="300" cy="330" rx="70" ry="22" fill="#2B2B2B" opacity="0.25" />
+            <circle cx="300" cy="300" r="62" fill="#C9B08A" stroke="#2B2B2B" stroke-width="4" />
+            <circle cx="300" cy="300" r="34" fill="#F3E6C8" stroke="#2B2B2B" stroke-width="4" />
+            <path id="p-flame" d="M 300 300 C 284 282 290 262 300 244 C 310 262 316 282 300 300 Z" fill="#FFC15E" stroke="#E0702A" stroke-width="4" />
+            <circle id="p-glow" cx="300" cy="290" r="520" fill="url(#p-candle)" />
+            <!-- inkwell -->
+            <circle cx="1560" cy="300" r="58" fill="#39404D" stroke="#2B2B2B" stroke-width="4" />
+            <circle cx="1560" cy="300" r="26" fill="#14161B" />
+            <!-- bound books -->
+            <rect x="1440" y="640" width="300" height="200" rx="10" fill="#8C2F2A" stroke="#2B2B2B" stroke-width="4" transform="rotate(8 1590 740)" />
+            <rect x="1460" y="620" width="300" height="200" rx="10" fill="#3B5BDB" stroke="#2B2B2B" stroke-width="4" transform="rotate(-4 1610 720)" />
+          </g>
+          <!-- the stack of finished pages -->
+          <g id="p-stack"></g>
+          <!-- the page: leaf -> parchment -->
+          <g id="p-page">
+            <rect id="p-pshadow" x="230" y="660" width="1500" height="22" rx="11" fill="#2B2B2B" opacity="0.12" />
+            <rect id="p-sheet" x="210" y="445" width="1500" height="190" rx="40" fill="#D9B56E" stroke="#2B2B2B" stroke-width="4" />
+            <g id="p-glyphs" fill="none" stroke="#3B2A16" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="p-ink" fill="none" stroke="#3A2A1A" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"></g>
+          </g>
+          <!-- quill + hand -->
+          <g id="p-quill" opacity="0">
+            <path d="M 0 0 L 8 -12" stroke="#2B2B2B" stroke-width="5" stroke-linecap="round" />
+            <path d="M 6 -10 C 40 -80 110 -170 190 -230 C 160 -150 110 -80 14 -4 Z" fill="#FFFFFF" stroke="#2B2B2B" stroke-width="4" stroke-linejoin="round" />
+            <path d="M 14 -18 C 70 -100 130 -170 180 -220" stroke="#C9C2B6" stroke-width="3" fill="none" />
+            <path d="M 30 -26 C 34 -56 70 -64 86 -42 C 98 -22 84 6 60 8 C 40 8 26 -6 30 -26 Z" fill="#E0AC85" stroke="#2B2B2B" stroke-width="4" />
+            <path d="M 70 4 L 150 70 L 190 30 L 96 -36" fill="#6B3A2A" stroke="#2B2B2B" stroke-width="4" stroke-linejoin="round" />
+          </g>
+        </g>
+        <rect id="p-dvig" x="0" y="0" width="1920" height="1080" fill="url(#p-vig)" opacity="0" />
+      </g>
+
+      <!-- ===== the printing press (front view) ===== -->
+      <g id="p-press" opacity="0">
+        <rect x="0" y="0" width="1920" height="1080" fill="#5A3E2B" />
+        <path d="M 1300 0 L 1700 0 L 1100 1080 L 600 1080 Z" fill="url(#p-window)" />
+        <rect x="0" y="930" width="1920" height="150" fill="#3D2A1D" />
+        <g id="p-pcam">
+          <!-- press frame -->
+          <ellipse cx="900" cy="962" rx="420" ry="26" fill="#1A100A" opacity="0.4" />
+          <rect x="600" y="100" width="70" height="860" rx="8" fill="#7A5236" stroke="#2B2B2B" stroke-width="5" />
+          <rect x="1130" y="100" width="70" height="860" rx="8" fill="#7A5236" stroke="#2B2B2B" stroke-width="5" />
+          <rect x="560" y="100" width="680" height="110" rx="10" fill="#8A5E3E" stroke="#2B2B2B" stroke-width="5" />
+          <rect x="590" y="236" width="620" height="40" rx="6" fill="#8A5E3E" stroke="#2B2B2B" stroke-width="5" />
+          <g id="p-screw">
+            <rect x="878" y="210" width="44" height="210" fill="#9AA1AE" stroke="#2B2B2B" stroke-width="5" />
+            <g id="p-threads" stroke="#5B6474" stroke-width="4"></g>
+          </g>
+          <g id="p-lever"><rect x="0" y="-11" width="10" height="22" rx="8" fill="#5B6474" stroke="#2B2B2B" stroke-width="4" /></g>
+          <g id="p-platen">
+            <rect x="660" y="410" width="480" height="70" rx="6" fill="#6B4A33" stroke="#2B2B2B" stroke-width="5" />
+            <rect x="680" y="480" width="440" height="16" fill="#3B2A1E" stroke="#2B2B2B" stroke-width="4" />
+          </g>
+          <!-- bed with the forme and the sheet -->
+          <rect x="560" y="700" width="680" height="56" rx="6" fill="#8A5E3E" stroke="#2B2B2B" stroke-width="5" />
+          <rect x="680" y="676" width="440" height="26" fill="#2F333C" stroke="#2B2B2B" stroke-width="4" />
+          <g id="p-bedsheet"><rect x="690" y="664" width="420" height="14" fill="#FBF7EC" stroke="#2B2B2B" stroke-width="3" /></g>
+          <rect x="560" y="756" width="680" height="200" fill="#7A5236" stroke="#2B2B2B" stroke-width="5" />
+          <!-- the printer, beside the press, pulls the lever -->
+          <g id="p-op">
+            <ellipse cx="1380" cy="962" rx="120" ry="18" fill="#1A100A" opacity="0.4" />
+            <path d="M 1300 960 L 1306 600 Q 1316 512 1376 502 Q 1436 512 1446 600 L 1456 960 Z" fill="#A0522D" stroke="#2B2B2B" stroke-width="5" stroke-linejoin="round" />
+            <path d="M 1306 640 L 1450 640 L 1458 960 L 1298 960 Z" fill="#D9CBB0" stroke="#2B2B2B" stroke-width="5" stroke-linejoin="round" />
+            <path d="M 1316 640 Q 1380 600 1440 640" fill="none" stroke="#2B2B2B" stroke-width="4" />
+            <rect x="1352" y="470" width="44" height="44" rx="12" fill="#E0AC85" stroke="#2B2B2B" stroke-width="4" />
+            <g id="p-ophead">
+              <path d="M 1322 420 C 1320 372 1350 350 1384 352 C 1420 356 1432 386 1428 420 C 1424 456 1400 474 1374 474 C 1344 474 1324 452 1322 420 Z" fill="#E0AC85" stroke="#2B2B2B" stroke-width="4" />
+              <path d="M 1324 418 Q 1310 432 1318 440 L 1326 436" fill="#E0AC85" stroke="#2B2B2B" stroke-width="4" stroke-linejoin="round" />
+              <path d="M 1316 384 C 1320 344 1360 330 1396 338 C 1428 346 1440 372 1434 396 L 1352 390 Z" fill="#3B2A1E" stroke="#2B2B2B" stroke-width="4" stroke-linejoin="round" />
+              <circle cx="1350" cy="414" r="5" fill="#2B2B2B" />
+              <path d="M 1340 400 Q 1350 394 1360 398" stroke="#3B2A1E" stroke-width="4" fill="none" stroke-linecap="round" />
+              <path d="M 1344 446 Q 1354 450 1362 446" stroke="#2B2B2B" stroke-width="3.5" fill="none" stroke-linecap="round" />
+            </g>
+            <path id="p-arm-o" d="M 0 0" stroke="#2B2B2B" stroke-width="52" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+            <path id="p-arm" d="M 0 0" stroke="#A0522D" stroke-width="44" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+            <circle id="p-hand" cx="0" cy="0" r="24" fill="#E0AC85" stroke="#2B2B2B" stroke-width="4" />
+          </g>
+          <!-- printed stacks -->
+          <g id="p-stacks"></g>
+          <g id="p-fly"></g>
+        </g>
+        <rect x="0" y="0" width="1920" height="1080" fill="url(#p-vig)" />
+      </g>
+      <!-- the page that flies into the camera (hands off to the typewriter) -->
+      <g id="p-final" opacity="0">
+        <rect id="p-fsheet" x="-300" y="-390" width="600" height="780" rx="6" fill="#FBF7EC" stroke="#2B2B2B" stroke-width="4" />
+        <g id="p-flines"></g>
+      </g>
+    </svg>
+  </div>
+  <script>
+    (() => {
+      const NS = "http://www.w3.org/2000/svg", $ = (id) => document.getElementById(id);
+      const mk = (tag, a, p) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); p && p.appendChild(e); return e; };
+      const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x)), lerp = (a, b, p) => a + (b - a) * p;
+      const E = { io: (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2), out: (p) => 1 - Math.pow(1 - p, 4), in3: (p) => p * p * p, lin: (p) => p, expo: (p) => (p >= 1 ? 1 : 1 - Math.pow(2, -10 * p)) };
+      const seg = (t, a, b, e = "io") => E[e](cl((t - a) / (b - a)));
+      const hash = (n) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+      const mix = (c1, c2, p) => { const a = [1, 3, 5].map((i) => parseInt(c1.slice(i, i + 2), 16)), b = [1, 3, 5].map((i) => parseInt(c2.slice(i, i + 2), 16)); return "#" + a.map((x, i) => Math.round(lerp(x, b[i], p)).toString(16).padStart(2, "0")).join(""); };
+
+      // ---- the leaf's script, drawn exactly as the previous scene ends (same generator, same seeds)
+      const ROWS = [492, 540, 588], G0 = 262, G1 = 1660, GW = 34;
+      ROWS.forEach((y, r) => {
+        for (let x = G0, k = 0; x < G1; x += GW, k++) {
+          if (Math.abs(x - 560) < 30 || Math.abs(x - 1360) < 30) continue;
+          const s = r * 1000 + k, h = (n) => hash(s * 7 + n);
+          const base = [`M ${x} ${y + 8} q 4 -20 14 -14 q 8 6 0 16`, `M ${x} ${y - 10} l 0 20 q 10 4 16 -6`, `M ${x + 2} ${y + 8} a 8 9 0 1 1 12 -2`, `M ${x} ${y - 6} q 8 -8 16 0 q -8 8 0 16`, `M ${x} ${y + 6} q 8 -24 18 -6`, `M ${x} ${y - 8} q 18 0 8 10 q -10 8 10 8`][Math.floor(h(1) * 6)];
+          const top = [` m -2 -22 q 8 -6 14 0`, ` m -8 -26 l 6 -6`, ``, ` m -4 -24 a 4 4 0 1 0 0.1 0`][Math.floor(h(2) * 4)];
+          const tail = h(3) > 0.6 ? ` m 2 4 l 6 10` : h(3) > 0.3 ? ` m -10 6 q 6 6 12 0` : ``;
+          mk("path", { d: base + top + tail, opacity: r === 2 ? 0.95 : 1 }, $("p-glyphs"));
+        }
+      });
+      // ---- handwriting on the parchment: cursive scribbles, one per line (page-local coordinates: page is 600 x 820 at 660,130)
+      const PX = 660, PY = 130, LINES = [];
+      for (let i = 0; i < 9; i++) {
+        const y = PY + 120 + i * 70, x0 = PX + (i === 0 ? 150 : 70), x1 = PX + (i === 0 ? 450 : 530 - (i === 8 ? 200 : hash(i) * 60));
+        let d = `M ${x0} ${y}`, x = x0, k = 0;
+        while (x < x1) { const w = 10 + hash(i * 50 + k) * 12, up = 14 + hash(i * 50 + k + 7) * (i === 0 ? 22 : 14); d += ` q ${w * 0.5} ${-up} ${w} 0 q ${w * 0.2} ${up * 0.4} ${w * 0.5} ${hash(k + i) > 0.7 ? 8 : 0}`; x += w * 1.5; k++; if (hash(i * 31 + k) > 0.86) { d += ` m 16 0`; x += 16; } }
+        LINES.push({ el: mk("path", { d, pathLength: 1, "stroke-dasharray": 1, "stroke-dashoffset": 1, "stroke-width": i === 0 ? 4.6 : 3.4 }, $("p-ink")), x0, x1, y });
+      }
+      // ---- the stack of pages and the printed stacks
+      const stackPages = []; for (let i = 0; i < 6; i++) stackPages.push(mk("rect", { x: 0, y: 0, width: 600, height: 820, rx: 6, fill: "#F4EAD3", stroke: "#2B2B2B", "stroke-width": 4, opacity: 0 }, $("p-stack")));
+      const STACKS = [[470, 0.0], [310, 0.35], [150, 0.6]], stackEls = STACKS.map(([x]) => { const g = mk("g", {}, $("p-stacks")); const body = mk("rect", { x: x - 90, y: 0, width: 180, height: 10, fill: "#FBF7EC", stroke: "#2B2B2B", "stroke-width": 4 }, g); const lines = mk("g", { stroke: "#D9D2C0", "stroke-width": 2 }, g); return { g, body, lines, x }; });
+      const flies = []; for (let i = 0; i < 4; i++) { const g = mk("g", { opacity: 0 }, $("p-fly")); mk("rect", { x: -100, y: -8, width: 200, height: 16, fill: "#FBF7EC", stroke: "#2B2B2B", "stroke-width": 3 }, g); flies.push(g); }
+      for (let i = 0; i < 8; i++) mk("line", { x1: 878, x2: 922, y1: 230 + i * 24, y2: 242 + i * 24 }, $("p-threads"));
+      for (let i = 0; i < 12; i++) mk("rect", { x: -240, y: -320 + i * 56 + (i > 0 ? 40 : 0), width: i === 0 ? 300 : 480 - hash(i + 3) * 120, height: i === 0 ? 30 : 14, rx: 4, fill: "#2B2B2B", opacity: i === 0 ? 0.8 : 0.55 }, $("p-flines"));
+      const PRESS = [5.2, 5.8, 6.32, 6.78];                       // each pull of the lever (getting faster)
+
+      function render(t) {
+        // ---------- leaf -> parchment on a wooden desk
+        const m = seg(t, 0.05, 0.95, "io");
+        const sh = $("p-sheet"), X = lerp(210, PX, m), Y = lerp(445, PY, m), W = lerp(1500, 600, m), H = lerp(190, 820, m);
+        sh.setAttribute("x", X); sh.setAttribute("y", Y); sh.setAttribute("width", W); sh.setAttribute("height", H); sh.setAttribute("rx", lerp(40, 6, m)); sh.setAttribute("fill", mix("#D9B56E", "#F4EAD3", m));
+        const ps = $("p-pshadow"); ps.setAttribute("x", X + 12); ps.setAttribute("y", Y + H + 6 - 18 * m); ps.setAttribute("width", W); ps.setAttribute("height", lerp(22, 18, m)); ps.setAttribute("opacity", 0.12 + 0.1 * m);
+        const gOut = seg(t, 0.0, 0.4, "in3"); $("p-glyphs").setAttribute("opacity", 1 - gOut); $("p-glyphs").style.filter = gOut > 0 ? `blur(${gOut * 8}px)` : "none";
+        const wood = seg(t, 0.25, 0.95, "io"); $("p-wood").setAttribute("opacity", wood); $("p-deskthings").setAttribute("opacity", seg(t, 0.5, 1.1)); $("p-dvig").setAttribute("opacity", wood);
+        const flick = 0.85 + 0.1 * Math.sin(t * 14) + 0.05 * Math.sin(t * 33); $("p-glow").setAttribute("opacity", flick);
+        $("p-flame").setAttribute("transform", `translate(300 300) scale(${0.95 + 0.06 * Math.sin(t * 19)} ${0.9 + 0.12 * Math.sin(t * 12.5)}) translate(-300 -300)`);
+        // quill writes the lines
+        const W0 = 1.0, W1 = 3.35, per = (W1 - W0) / LINES.length; let qtip = null;
+        LINES.forEach((L, i) => {
+          const a = W0 + i * per, p = seg(t, a, a + per * 0.92, "lin"); L.el.setAttribute("stroke-dashoffset", 1 - p);
+          if (t >= a && t < a + per) qtip = [lerp(L.x0, L.x1, p) + Math.sin(t * 40) * 4, L.y + Math.sin(t * 61) * 6 - 4];
+        });
+        if (!qtip) qtip = t < W0 ? [LINES[0].x0 + 120 * (1 - seg(t, 0.6, W0)), LINES[0].y - 80 * (1 - seg(t, 0.6, W0))] : [LINES[8].x1 + 80 * seg(t, W1, W1 + 0.4), LINES[8].y - 200 * seg(t, W1, W1 + 0.4)];
+        $("p-quill").setAttribute("transform", `translate(${qtip[0]} ${qtip[1]})`); $("p-quill").setAttribute("opacity", seg(t, 0.55, 0.85) * (1 - seg(t, 3.4, 3.7)));
+        // the finished page slides onto the stack, more pages land on it
+        const slide = seg(t, 3.45, 4.05, "io"), dcam = kf(t, [[0, [1, 960, 540]], [1.0, [1, 960, 540]], [2.2, [1.25, 900, 470], "io"], [3.3, [1.25, 960, 640], "io"], [4.2, [0.78, 860, 560], "io"]]);
+        $("p-dcam").setAttribute("transform", `translate(960 540) scale(${dcam[0]}) translate(${-dcam[1]} ${-dcam[2]})`);
+        const SX = 120, SY = 150;
+        $("p-page").setAttribute("transform", `translate(${(SX - PX) * slide} ${(SY - PY) * slide}) rotate(${-3 * slide} ${PX + 300} ${PY + 410})`);
+        stackPages.forEach((r, i) => {
+          const land = seg(t, 3.75 + i * 0.12, 4.05 + i * 0.12, "out"), k = 5 - i;
+          r.setAttribute("x", SX - 8 + k * 3); r.setAttribute("y", SY + 10 + k * 5 - (1 - land) * 240); r.setAttribute("opacity", land > 0 ? 1 : 0);
+          r.setAttribute("transform", `rotate(${(hash(i) - 0.5) * 6 * (1 - land) + (hash(i + 9) - 0.5) * 2} ${SX + 300} ${SY + 410})`);
+        });
+        // ---------- whip to the printing press
+        const whip = seg(t, 4.35, 4.85, "in3"), pin = seg(t, 4.7, 5.05, "out");
+        $("p-desk").setAttribute("transform", `translate(${-1400 * whip} 0)`); $("p-desk").style.filter = whip > 0 && whip < 1 ? `blur(${Math.sin(Math.PI * whip) * 14}px)` : "none";
+        $("p-desk").setAttribute("opacity", 1 - seg(t, 4.75, 4.85, "lin"));
+        $("p-press").setAttribute("opacity", pin); $("p-press").setAttribute("transform", `translate(${(1 - pin) * 600} 0)`);
+        // the press: platen down/up on each pull, the lever swings, the arm pulls it
+        let down = 0; PRESS.forEach((a, i) => { const d = 0.5 - i * 0.05, p = (t - a) / d; if (p > 0 && p < 1) down = Math.sin(Math.PI * p); });
+        $("p-platen").setAttribute("transform", `translate(0 ${down * 160})`);
+        const ang = down * 1.25, lx = Math.cos(ang) * 300, end = [900 + lx, 300 + 24 * Math.sin(ang)];
+        const lev = $("p-lever").firstElementChild; lev.setAttribute("x", Math.min(900, end[0]) - 6); lev.setAttribute("width", Math.abs(lx) + 12); $("p-lever").setAttribute("transform", `translate(0 ${300})`);
+        // the printer leans into each pull; the arm is shoulder -> elbow -> hand on the lever end (in the printer's own space)
+        const leanX = -46 * down, hand = [end[0] + 8 - leanX, end[1] + 4], sh0 = [1352, 548], elbow = [(sh0[0] + hand[0]) / 2 + 34, Math.max(sh0[1], hand[1]) + 70];
+        $("p-op").setAttribute("transform", `translate(${leanX} ${8 * down})`); $("p-ophead").setAttribute("transform", `rotate(${-6 * down} 1376 470)`);
+        const ad = `M ${sh0[0]} ${sh0[1]} L ${elbow[0]} ${elbow[1]} L ${hand[0]} ${hand[1]}`;
+        $("p-arm").setAttribute("d", ad); $("p-arm-o").setAttribute("d", ad); $("p-hand").setAttribute("cx", hand[0]); $("p-hand").setAttribute("cy", hand[1]);
+        // copies fly to the stack, stacks rise
+        flies.forEach((g, i) => { const a = PRESS[i] + 0.3, p = seg(t, a, a + 0.32, "out"); g.setAttribute("opacity", t > a && t < a + 0.34 ? 1 : 0); g.setAttribute("transform", `translate(${lerp(900, 470, p)} ${lerp(664, 900 - 40 * (i + 1), p) - 120 * Math.sin(Math.PI * p)}) rotate(${8 * Math.sin(Math.PI * p)})`); });
+        stackEls.forEach((s, i) => {
+          const h = i === 0 ? PRESS.filter((a) => t > a + 0.62).length * 40 + seg(t, 7.2, 7.9, "expo") * 260 : seg(t, 7.05 + STACKS[i][1] * 0.6, 7.75 + STACKS[i][1] * 0.6, "expo") * (300 + i * 70);
+          s.body.setAttribute("y", 930 - h); s.body.setAttribute("height", Math.max(0, h)); s.g.setAttribute("opacity", h > 1 ? 1 : 0);
+          while (s.lines.childNodes.length) s.lines.removeChild(s.lines.firstChild);
+          for (let y = 930 - 10; y > 930 - h + 6; y -= 12) mk("line", { x1: s.x - 86, x2: s.x + 86, y1: y, y2: y }, s.lines);
+        });
+        const pc = kf(t, [[0, [1, 960, 540]], [6.9, [1, 960, 540]], [7.9, [0.86, 800, 520], "io"]]);
+        $("p-pcam").setAttribute("transform", `translate(960 540) scale(${pc[0]}) translate(${-pc[1]} ${-pc[2]})`);
+        // ---------- one printed page flies into the camera and fills the frame
+        const fly = seg(t, 7.95, 8.55, "in3"), from = [(470 - 800) * 0.86 + 960, (930 - 300 - 520) * 0.86 + 540];
+        const fx = lerp(from[0], 960, E.out(cl((t - 7.95) / 0.4))), fy = lerp(from[1], 540, E.out(cl((t - 7.95) / 0.4))), fs = lerp(0.28, 3.4, fly);
+        $("p-final").setAttribute("opacity", t >= 7.95 ? 1 : 0); $("p-final").setAttribute("transform", `translate(${fx} ${fy}) rotate(${(1 - fly) * -10}) scale(${fs})`);
+      }
+      function kf(t, keys) {
+        if (t <= keys[0][0]) return keys[0][1];
+        for (let i = 1; i < keys.length; i++) { const [t1, v1, e] = keys[i], [t0, v0] = keys[i - 1]; if (t <= t1) { const p = E[e || "io"]((t - t0) / (t1 - t0)); return Array.isArray(v0) ? v0.map((x, j) => lerp(x, v1[j], p)) : lerp(v0, v1, p); } }
+        return keys[keys.length - 1][1];
+      }
+      const tl = gsap.timeline({ paused: true }), clock = { t: 0 };
+      tl.to(clock, { t: 8.6, duration: 8.6, ease: "none", onUpdate: () => render(clock.t) }, 0);
+      render(0);
+      window.__timelines["paper"] = tl;
+    })();
+  </script>
+</template>

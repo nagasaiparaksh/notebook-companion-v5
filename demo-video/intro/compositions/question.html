@@ -1,0 +1,63 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #q-flood { position: absolute; inset: 0; background: #0E1116; opacity: 0; }
+    #q-wave { position: absolute; inset: 0; width: 100%; height: 100%; }
+    #q-text { position: absolute; left: 200px; top: 250px; width: 1560px; font-family: "Inter", sans-serif; font-weight: 900;
+              font-size: 96px; line-height: 1.16; letter-spacing: -0.02em; color: #F4F1EA; }
+    #q-text .w { display: inline-block; opacity: 0; margin-right: 0.24em; }
+    #q-text .accent { color: #FFE45C; }
+    #q-disc { position: absolute; left: 908px; top: 896px; width: 104px; height: 104px; border-radius: 50%; background: #FFE45C;
+              border: 3px solid #2B2B2B; box-shadow: 3px 4px 0 rgba(0,0,0,.25); opacity: 0; display: grid; place-items: center; }
+    #q-app { position: absolute; inset: 0; }
+    #q-app img { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+  </style>
+  <div id="root" data-composition-id="question" data-width="1920" data-height="1080">
+    <div id="q-flood" class="clip" data-start="0" data-duration="5.2"></div>
+    <svg id="q-wave" class="clip" data-start="0" data-duration="5.2" viewBox="0 0 1920 1080" data-layout-allow-overflow>
+      <path id="q-glow" d="M 0 0" fill="none" stroke="#FFE45C" stroke-width="16" stroke-linecap="round" opacity="0.35" style="filter: blur(18px)" />
+      <path id="q-line" d="M 0 0" fill="none" stroke="#FFE45C" stroke-width="5" stroke-linecap="round" />
+    </svg>
+    <div id="q-text" class="clip" data-start="0" data-duration="5.2">
+      <div><span class="w">WHAT</span><span class="w">IF</span><span class="w">WE</span><span class="w">COULD</span></div>
+      <div><span class="w accent">TALK</span><span class="w">TO</span><span class="w">OUR</span><span class="w">KNOWLEDGE?</span></div>
+    </div>
+    <div id="q-disc" class="clip" data-start="0" data-duration="5.2">
+      <svg width="46" height="56" viewBox="0 0 46 56"><path d="M 23 4 v 26 M 9 24 a 14 14 0 0 0 28 0 M 23 38 v 12" fill="none" stroke="#2B2B2B" stroke-width="5" stroke-linecap="round" /><rect x="15" y="3" width="16" height="30" rx="8" fill="#2B2B2B" /></svg>
+    </div>
+    <div id="q-app" class="clip" data-start="4.7" data-duration="0.5">
+      <img id="q-shot" src="assets/img/app.png" alt="Notebook Companion" />
+    </div>
+  </div>
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
+      const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x)), lerp = (a, b, p) => a + (b - a) * p;
+      const io3 = (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2), in3 = (p) => p * p * p;
+      // where the tablet's waveform sits on screen when the story freezes (camera 1.22 on world 930,590)
+      const START = { x0: 1212, x1: 1528, cy: 518, a: 16 }, FULL = { x0: -40, x1: 1960, cy: 800, a: 44 }, MIC = { x0: 960, x1: 960, cy: 948, a: 0 };
+      function wave(t) {
+        const grow = io3(cl((t - 0.15) / 0.8)), shrink = in3(cl((t - 4.35) / 0.4));
+        const s = {}; for (const k of ["x0", "x1", "cy", "a"]) s[k] = lerp(lerp(START[k], FULL[k], grow), MIC[k], shrink);
+        let d = "";
+        for (let i = 0; i <= 160; i++) {
+          const u = i / 160, x = lerp(s.x0, s.x1, u), env = Math.pow(Math.sin(Math.PI * u), 1.4);
+          const y = s.cy + s.a * env * Math.sin(u * Math.PI * 2 * 5.5 + t * 7) * (0.62 + 0.38 * Math.sin(u * 9 + t * 3.1));
+          d += (i ? " L " : "M ") + x.toFixed(1) + " " + y.toFixed(1);
+        }
+        $("q-line").setAttribute("d", d); $("q-glow").setAttribute("d", d);
+        const vis = t < 4.75 ? 1 : 0; $("q-line").setAttribute("opacity", vis); $("q-glow").setAttribute("opacity", 0.35 * vis);
+      }
+      const tl = gsap.timeline({ paused: true }), clock = { t: 0 };
+      tl.to(clock, { t: 5.2, duration: 5.2, ease: "none", onUpdate: () => wave(clock.t) }, 0);
+      tl.fromTo("#q-flood", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.inOut" }, 0);
+      const words = gsap.utils.toArray("#q-text .w");
+      words.forEach((w, i) => tl.fromTo(w, { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.15, ease: "power4.out" }, 0.7 + i * 0.09));
+      words.forEach((w, i) => tl.to(w, { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in" }, 4.3 + i * 0.025));
+      tl.fromTo("#q-disc", { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.25, ease: "expo.out" }, 4.6);
+      tl.fromTo("#q-shot", { clipPath: "circle(52px at 960px 948px)" }, { clipPath: "circle(2300px at 960px 948px)", duration: 0.45, ease: "power3.inOut" }, 4.7);
+      wave(0);
+      window.__timelines["question"] = tl;
+    })();
+  </script>
+</template>

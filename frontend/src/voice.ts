@@ -67,7 +67,8 @@ export function createVoiceLoop(o: LoopOpts) {
       seg.push(chunk); segMs += ms;
       if (rms > thr * 0.7) { silentMs = 0; if (rms > thr) voicedMs += ms; } else silentMs += ms;
       if (silentMs > 1100 || segMs > 50000) {
-        const all = seg, enough = voicedMs >= 320; inSpeech = false; seg = []; voiced = 0; silentMs = 0; set("listening");
+        // 200 ms of voice: short commands ("undo", "redo") are ~0.3 s of voice; a click is under 0.1 s
+        const all = seg, enough = voicedMs >= 200; inSpeech = false; seg = []; voiced = 0; silentMs = 0; set("listening");
         if (!enough) return;                                            // a click or cough, not speech
         let len = 0; for (const c of all) len += c.length; const pcm = new Float32Array(len); let p = 0; for (const c of all) { pcm.set(c, p); p += c.length; }
         const wav = encodeWav16k(pcm, sr), secs = len / sr;

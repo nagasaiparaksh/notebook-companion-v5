@@ -1,0 +1,71 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #12100D; overflow: hidden; }
+    #f-light { position: absolute; inset: 0; opacity: 0; background-color: #FFFFFF;
+               background-image: linear-gradient(#F0F0F0 1px, transparent 1px), linear-gradient(90deg, #F0F0F0 1px, transparent 1px); background-size: 24px 24px; }
+    #f-shot { position: absolute; inset: 0; }
+    #f-move { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden; outline: 3px solid transparent; }
+    #f-move img { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #f-fx { position: absolute; inset: 0; width: 100%; height: 100%; }
+    #f-title { position: absolute; left: 120px; top: 360px; width: 760px; font-family: "Inter", sans-serif; color: #2B2B2B; }
+    #f-title .big { font-weight: 900; font-size: 92px; line-height: 0.98; letter-spacing: -0.02em; }
+    #f-title .tag { margin-top: 26px; font-weight: 600; font-size: 40px; color: #3B5BDB; }
+    #f-title .w { display: inline-block; opacity: 0; margin-right: 0.22em; }
+  </style>
+  <div id="root" data-composition-id="finale" data-width="1920" data-height="1080">
+    <div id="f-light" class="clip" data-start="0" data-duration="8.1"></div>
+    <div id="f-shot" class="clip" data-start="0" data-duration="8.1"><div id="f-move"><img id="f-img" src="assets/img/app-start.png" alt="Notebook Companion" /></div></div>
+    <svg id="f-fx" class="clip" data-start="0" data-duration="8.1" viewBox="0 0 1920 1080" data-layout-allow-overflow>
+      <defs><filter id="f-glow" x="-10%" y="-300%" width="120%" height="700%"><feGaussianBlur stdDeviation="10" /></filter></defs>
+      <path id="f-waveglow" d="M 0 0" fill="none" stroke="#FFE45C" stroke-width="14" stroke-linecap="round" filter="url(#f-glow)" opacity="0.75" />
+      <path id="f-wave" d="M 0 0" fill="none" stroke="#FFE45C" stroke-width="5" stroke-linecap="round" />
+      <rect id="f-caret" x="650" y="182" width="4" height="40" rx="2" fill="#2B2B2B" opacity="0" />
+      <circle id="f-ring1" cx="960" cy="921" r="64" fill="none" stroke="#FFE45C" stroke-width="6" opacity="0" />
+      <circle id="f-ring2" cx="960" cy="921" r="64" fill="none" stroke="#FFE45C" stroke-width="6" opacity="0" />
+    </svg>
+    <div id="f-title" class="clip" data-start="0" data-duration="8.1">
+      <div class="big"><span class="w">NOTEBOOK</span><br /><span class="w">COMPANION</span></div>
+      <div class="tag"><span class="w">Think</span><span class="w">with</span><span class="w">your</span><span class="w">notes.</span></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
+      const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x)), lerp = (a, b, p) => a + (b - a) * p;
+      const E = { io: (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2), out: (p) => 1 - Math.pow(1 - p, 4), in3: (p) => p * p * p };
+      const seg = (t, a, b, e = "io") => E[e](cl((t - a) / (b - a)));
+      const PAGE = { x0: 604, x1: 1554, y0: 149, y1: 1080 }, MIC = [960, 921];
+      function wave(x0, x1, y, amp, t) {          // same wave as the timeline scene (its clock continues from 4.8 s)
+        let d = "";
+        for (let i = 0; i <= 200; i++) { const u = i / 200, x = lerp(x0, x1, u), env = Math.pow(Math.sin(Math.PI * u), 0.6); d += (i ? " L " : "M ") + x.toFixed(1) + " " + (y + amp * env * Math.sin(u * 40 + t * 7) * (0.6 + 0.4 * Math.sin(u * 11 + t * 3))).toFixed(1); }
+        return d;
+      }
+      function render(t) {
+        // the waveform settles into a single bright line the width of the page ... and the notebook opens from it
+        const flat = seg(t, 0.0, 0.7, "io"), open = seg(t, 0.7, 1.6, "io");
+        const d = wave(lerp(-40, PAGE.x0, flat), lerp(1960, PAGE.x1, flat), 540, 30 * (1 - flat), t + 4.8);
+        $("f-wave").setAttribute("d", d); $("f-waveglow").setAttribute("d", d);
+        $("f-wave").setAttribute("opacity", 1 - seg(t, 1.0, 1.5)); $("f-waveglow").setAttribute("opacity", 0.75 * (1 - seg(t, 1.0, 1.5)));
+        // the real app's page, revealed from the line; then the whole app around it
+        const top = lerp(540, PAGE.y0, open), bot = lerp(540, PAGE.y1, open), all = seg(t, 4.3, 4.9, "io");
+        const ins = [lerp(top, 0, all), lerp(1920 - PAGE.x1, 0, all), lerp(1080 - bot, 0, all), lerp(PAGE.x0, 0, all)];
+        $("f-img").style.clipPath = t < 0.7 ? "inset(540px 1920px 540px 0px)" : `inset(${ins[0]}px ${ins[1]}px ${ins[2]}px ${ins[3]}px)`;
+        // a cursor blinks on the first line; the mic starts listening
+        $("f-caret").setAttribute("opacity", t > 1.7 && t < 4.4 && Math.floor((t - 1.7) * 2.2) % 2 === 0 ? 1 : 0);
+        [["f-ring1", 2.55], ["f-ring2", 3.15]].forEach(([id, a]) => { const p = (t - a) / 0.9; $(id).setAttribute("opacity", p > 0 && p < 1 ? 0.9 * (1 - p) : 0); $(id).setAttribute("r", 64 + 70 * E.out(cl(p))); });
+        // the app steps aside for the name, then comes back full screen (the first frame of the demo)
+        $("f-light").style.opacity = seg(t, 4.85, 5.0, "io");
+      }
+      const tl = gsap.timeline({ paused: true }), clock = { t: 0 };
+      tl.to(clock, { t: 8.1, duration: 8.1, ease: "none", onUpdate: () => render(clock.t) }, 0);
+      // the app steps aside for the name (centre at 1350, 540, half size), then comes back full screen
+      tl.fromTo("#f-move", { x: 0, y: 0, scale: 1, borderRadius: 0, boxShadow: "0px 0px 0px rgba(0,0,0,0)" }, { x: 870, y: 270, scale: 0.5, borderRadius: 36, boxShadow: "0px 24px 60px rgba(0,0,0,0.25)", duration: 0.65, ease: "power3.inOut" }, 4.95);
+      tl.to("#f-move", { x: 0, y: 0, scale: 1, borderRadius: 0, boxShadow: "0px 0px 0px rgba(0,0,0,0)", duration: 0.65, ease: "power3.inOut" }, 7.4);
+      const words = gsap.utils.toArray("#f-title .w");
+      words.forEach((w, i) => tl.fromTo(w, { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power4.out" }, 5.35 + i * 0.09));
+      words.forEach((w, i) => tl.to(w, { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in" }, 7.3 + i * 0.02));
+      render(0);
+      window.__timelines["finale"] = tl;
+    })();
+  </script>
+</template>

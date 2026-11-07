@@ -1,0 +1,207 @@
+{
+  "version": 1,
+  "historyId": "4678af7e-698b-47ec-9e4b-4381b73ee9a2",
+  "currentRevision": "2775885d-7b8c-4449-914f-7b9f5c6da604",
+  "pendingChanges": false,
+  "files": {
+    "AGENTS.md": {
+      "hash": "1a68041fc901ff835682a2a8d6f63c96dbb0b9eef8fb0971e97a79eaf69303d3",
+      "content": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\1a\\1a68041fc901ff835682a2a8d6f63c96dbb0b9eef8fb0971e97a79eaf69303d3"
+    },
+    "CLAUDE.md": {
+      "hash": "1a68041fc901ff835682a2a8d6f63c96dbb0b9eef8fb0971e97a79eaf69303d3",
+      "content": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\1a\\1a68041fc901ff835682a2a8d6f63c96dbb0b9eef8fb0971e97a79eaf69303d3"
+    },
+    "assets/img/last.png": {
+      "hash": "87fcb58e03453bac3f42cd1581ae287c7f6b2be20d6dd35bfbdd43f90f95253a",
+      "content": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\87\\87fcb58e03453bac3f42cd1581ae287c7f6b2be20d6dd35bfbdd43f90f95253a"
+    },
+    "assets/img/notes.png": {
+      "hash": "94ad67d13c138d51912e51d2c3581bf09d88bc2ef0bd48918f046d1eb099cdfb",
+      "content": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\94\\94ad67d13c138d51912e51d2c3581bf09d88bc2ef0bd48918f046d1eb099cdfb"
+    },
+    "assets/vo/d10.wav": {
+      "hash": "fb6195e6ce7cf24d9f1990a19c95abdc8f41248c846d324b85b7484d82ea4530",
+      "content": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\fb\\fb6195e6ce7cf24d9f1990a19c95abdc8f41248c846d324b85b7484d82ea4530"
+    },
+    "hyperframes.json": {
+      "hash": "35a6d4ea79ebe911f0d81705f7aace5d8ff0316b745b0311d56af50c9c237cb7",
+      "content": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\35\\35a6d4ea79ebe911f0d81705f7aace5d8ff0316b745b0311d56af50c9c237cb7"
+    },
+    "index.html": {
+      "hash": "d768e538670815612f1beb75eeec593ff1a5b1c1c4050355c6d4f2f1da852961",
+      "content": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\d7\\d768e538670815612f1beb75eeec593ff1a5b1c1c4050355c6d4f2f1da852961"
+    },
+    "meta.json": {
+      "hash": "cc848b49b216deea5175635a337a596f93d57759bf82a056846eb063531eea16",
+      "content": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\cc\\cc848b49b216deea5175635a337a596f93d57759bf82a056846eb063531eea16"
+    },
+    "package.json": {
+      "hash": "ca493c9833e721ae66e056a0a899ac02d70b801fde19e9f37d687f47ac081965",
+      "content": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\ca\\ca493c9833e721ae66e056a0a899ac02d70b801fde19e9f37d687f47ac081965"
+    }
+  },
+  "revisions": {
+    "2775885d-7b8c-4449-914f-7b9f5c6da604": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1794049310261,
+      "endedAt": 1794049310283,
+      "files": {
+        "assets/img/last.png": {
+          "before": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\69\\69d3eb2e13c3eb57bd062bfff1bcd92080d480498c3544942b6e235e7a570402",
+          "after": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\87\\87fcb58e03453bac3f42cd1581ae287c7f6b2be20d6dd35bfbdd43f90f95253a"
+        },
+        "assets/vo/d10.wav": {
+          "before": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\a1\\a126ee69532f2475d130cdf123775049aa89140f245fb2df6c3d7a16266a1e88",
+          "after": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\fb\\fb6195e6ce7cf24d9f1990a19c95abdc8f41248c846d324b85b7484d82ea4530"
+        },
+        "index.html": {
+          "before": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\b1\\b1c8b2ccdd02d964c6914a1f4c8b148a6892dd9d1026587dc0ad728fb07b6b59",
+          "after": "C:\\Users\\Y Naga Sai Paraksh\\.cache\\hyperframes\\history\\4678af7e-698b-47ec-9e4b-4381b73ee9a2\\blobs\\d7\\d768e538670815612f1beb75eeec593ff1a5b1c1c4050355c6d4f2f1da852961"
+        }
+      }
+    }
+  },
+  "checks": {
+    "latest": {
+      "revision": null,
+      "id": "29a5344b-c018-4bf4-9980-862259c68838"
+    },
+    "revisions": {},
+    "unversioned": [
+      {
+        "id": "29a5344b-c018-4bf4-9980-862259c68838",
+        "scope": "project",
+        "report": "C:\\Users\\Y Naga Sai Paraksh\\OneDrive\\Desktop\\gnani_projects\\notebook-companion-v5\\demo-video\\outro\\.hyperframes\\artifacts\\checks\\29a5344b-c018-4bf4-9980-862259c68838.json",
+        "metadata": {
+          "ok": true,
+          "browserSkipped": false,
+          "options": {
+            "samples": 9,
+            "atTransitions": false,
+            "maxIssues": 80,
+            "collapseStatic": true,
+            "tolerance": 2,
+            "timeout": 45000,
+            "contrast": true,
+            "strict": false,
+            "snapshots": false,
+            "browserGpuMode": "auto"
+          }
+        },
+        "createdAt": 1794046634123,
+        "contentHash": "4e2c1f9d59c350c6b0d8b7a3b245123aa0a23849d4ab1dd6e77aacb4b7a6e854",
+        "revision": null,
+        "inputFingerprint": "b863dc0503881bb2d0951b6e6d86d9d80bfde42c20a26f47e166bf5f71d2a63d",
+        "inputScope": "local-project-files",
+        "attribution": "unversioned"
+      }
+    ]
+  },
+  "snapshots": {
+    "latest": {
+      "revision": null,
+      "id": "9d33e116-72e4-42ec-aaf1-c920d374a4aa-3"
+    },
+    "revisions": {},
+    "unversioned": [
+      {
+        "scope": "full",
+        "id": "9d33e116-72e4-42ec-aaf1-c920d374a4aa-0",
+        "image": "C:\\Users\\Y Naga Sai Paraksh\\OneDrive\\Desktop\\gnani_projects\\notebook-companion-v5\\demo-video\\outro\\.hyperframes\\artifacts\\snapshots\\ddb01c15-dc4b-4e65-8956-db2dc0b16a01\\frame-00-at-0.1s.png",
+        "time": 0.1,
+        "metadata": {
+          "width": 1920,
+          "height": 1080,
+          "zoomScale": 1,
+          "browserGpuMode": "auto",
+          "warnings": [],
+          "partial": false
+        },
+        "createdAt": 1794046639450,
+        "contentHash": "842ad6e725b69cbb1cfac4457c5cee8786996658a40795e339bacd2dd8d2e5fb",
+        "revision": null,
+        "inputFingerprint": "b863dc0503881bb2d0951b6e6d86d9d80bfde42c20a26f47e166bf5f71d2a63d",
+        "inputScope": "local-project-files",
+        "attribution": "unversioned"
+      },
+      {
+        "scope": "full",
+        "id": "9d33e116-72e4-42ec-aaf1-c920d374a4aa-1",
+        "image": "C:\\Users\\Y Naga Sai Paraksh\\OneDrive\\Desktop\\gnani_projects\\notebook-companion-v5\\demo-video\\outro\\.hyperframes\\artifacts\\snapshots\\ddb01c15-dc4b-4e65-8956-db2dc0b16a01\\frame-01-at-0.6s.png",
+        "time": 0.6,
+        "metadata": {
+          "width": 1920,
+          "height": 1080,
+          "zoomScale": 1,
+          "browserGpuMode": "auto",
+          "warnings": [],
+          "partial": false
+        },
+        "createdAt": 1794046639450,
+        "contentHash": "ad52b22d0723daeb4a9b9fe916a4a5ce18c322bb9ecf617b040d61388742488d",
+        "revision": null,
+        "inputFingerprint": "b863dc0503881bb2d0951b6e6d86d9d80bfde42c20a26f47e166bf5f71d2a63d",
+        "inputScope": "local-project-files",
+        "attribution": "unversioned"
+      },
+      {
+        "scope": "full",
+        "id": "9d33e116-72e4-42ec-aaf1-c920d374a4aa-2",
+        "image": "C:\\Users\\Y Naga Sai Paraksh\\OneDrive\\Desktop\\gnani_projects\\notebook-companion-v5\\demo-video\\outro\\.hyperframes\\artifacts\\snapshots\\ddb01c15-dc4b-4e65-8956-db2dc0b16a01\\frame-02-at-1.6s.png",
+        "time": 1.6,
+        "metadata": {
+          "width": 1920,
+          "height": 1080,
+          "zoomScale": 1,
+          "browserGpuMode": "auto",
+          "warnings": [],
+          "partial": false
+        },
+        "createdAt": 1794046639450,
+        "contentHash": "cd7a28c703cdda00aa58f7744683b822876d335558a61f4bc49abc1b50c41292",
+        "revision": null,
+        "inputFingerprint": "b863dc0503881bb2d0951b6e6d86d9d80bfde42c20a26f47e166bf5f71d2a63d",
+        "inputScope": "local-project-files",
+        "attribution": "unversioned"
+      },
+      {
+        "scope": "full",
+        "id": "9d33e116-72e4-42ec-aaf1-c920d374a4aa-3",
+        "image": "C:\\Users\\Y Naga Sai Paraksh\\OneDrive\\Desktop\\gnani_projects\\notebook-companion-v5\\demo-video\\outro\\.hyperframes\\artifacts\\snapshots\\ddb01c15-dc4b-4e65-8956-db2dc0b16a01\\frame-03-at-4.7s.png",
+        "time": 4.7,
+        "metadata": {
+          "width": 1920,
+          "height": 1080,
+          "zoomScale": 1,
+          "browserGpuMode": "auto",
+          "warnings": [],
+          "partial": false
+        },
+        "createdAt": 1794046639450,
+        "contentHash": "cd7a28c703cdda00aa58f7744683b822876d335558a61f4bc49abc1b50c41292",
+        "revision": null,
+        "inputFingerprint": "b863dc0503881bb2d0951b6e6d86d9d80bfde42c20a26f47e166bf5f71d2a63d",
+        "inputScope": "local-project-files",
+        "attribution": "unversioned"
+      }
+    ]
+  },
+  "renders": {
+    "latest": {
+      "id": "560e4a82-0357-40e1-a9c7-e74593774e17",
+      "completedAt": 1794049328402,
+      "output": "C:\\Users\\Y Naga Sai Paraksh\\OneDrive\\Desktop\\gnani_projects\\notebook-companion-v5\\demo-video\\outro.mp4",
+      "status": "completed",
+      "revision": "2775885d-7b8c-4449-914f-7b9f5c6da604"
+    },
+    "retainedRevisions": [
+      "2775885d-7b8c-4449-914f-7b9f5c6da604"
+    ]
+  },
+  "pendingArtifactCleanup": []
+}

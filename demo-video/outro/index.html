@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #FFFFFF; }
+      #root { position: relative; width: 1920px; height: 1080px; }
+      #o-bg { position: absolute; inset: 0; background-color: #FFFFFF; background-image: linear-gradient(#F0F0F0 1px, transparent 1px), linear-gradient(90deg, #F0F0F0 1px, transparent 1px); background-size: 24px 24px; }
+      #o-shot { position: absolute; inset: 0; }
+      #o-move { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden; outline: 3px solid transparent; }
+      #o-move img { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #o-title { position: absolute; left: 120px; top: 360px; width: 760px; font-family: "Inter", sans-serif; color: #2B2B2B; }
+      #o-title .big { font-weight: 900; font-size: 92px; line-height: 0.98; letter-spacing: -0.02em; }
+      #o-title .tag { margin-top: 26px; font-weight: 600; font-size: 40px; color: #3B5BDB; }
+      #o-title .w { display: inline-block; opacity: 0; margin-right: 0.22em; }
+    </style>
+  </head>
+  <body>
+    <!-- Closing card: the notebook the student built by voice steps aside for the name. Narration: Gnani Timbre (Prakash). -->
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4.8" data-width="1920" data-height="1080">
+      <div id="o-bg" class="clip" data-start="0" data-duration="4.8" data-track-index="0"></div>
+      <div id="o-shot" class="clip" data-start="0" data-duration="4.8" data-track-index="1">
+        <div id="o-move"><img id="o-notes" src="assets/img/notes.png" alt="A notebook written by voice" /><img id="o-last" src="assets/img/last.png" alt="" /></div>
+      </div>
+      <div id="o-title" class="clip" data-start="0" data-duration="4.8" data-track-index="2">
+        <div class="big"><span class="w">NOTEBOOK</span><br /><span class="w">COMPANION</span></div>
+        <div class="tag"><span class="w">Think</span><span class="w">with</span><span class="w">your</span><span class="w">notes.</span></div>
+      </div>
+      <audio id="vo-d10" class="clip" data-start="0.95" data-duration="1.98" data-track-index="3" data-volume="1" src="assets/vo/d10.wav"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      // the demo's last frame (the lecture notes) dissolves into the notebook written by voice, which steps aside for the name
+      tl.fromTo("#o-last", { opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(8px)", duration: 0.35, ease: "power3.in" }, 0.15);
+      tl.fromTo("#o-move", { x: 0, y: 0, scale: 1, borderRadius: 0, boxShadow: "0px 0px 0px rgba(0,0,0,0)" }, { x: 870, y: 270, scale: 0.5, borderRadius: 36, boxShadow: "0px 24px 60px rgba(0,0,0,0.25)", duration: 0.7, ease: "power3.inOut" }, 0.45);
+      gsap.utils.toArray("#o-title .w").forEach((w, i) => tl.fromTo(w, { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power4.out" }, 0.95 + i * 0.09));
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

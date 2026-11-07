@@ -1,0 +1,466 @@
+<template>
+  <style>
+    @font-face { font-family: "Patrick Hand"; src: url("assets/fonts/PatrickHand-Regular.ttf") format("truetype"); }
+    #root { position: absolute; inset: 0; background: #EFE2CF; overflow: hidden; }
+    #s-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .ink { stroke: #2B2B2B; stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
+    .hand-t { font-family: "Patrick Hand", cursive; fill: #24305E; }
+    .typed { font-family: "Inter", sans-serif; font-weight: 700; fill: #2B2B2B; }
+    .ui { font-family: "Inter", sans-serif; font-weight: 700; fill: #2B2B2B; }
+    .mono { font-family: "IBM Plex Mono", monospace; font-weight: 500; fill: #2B2B2B; }
+  </style>
+  <div id="root" data-composition-id="modern" data-width="1920" data-height="1080">
+    <svg id="s-svg" class="clip" data-start="0" data-duration="15.9" viewBox="0 0 1920 1080" data-layout-allow-overflow>
+      <defs>
+        <radialGradient id="s-lampglow" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#FFF3D6" stop-opacity="0.95" />
+          <stop offset="1" stop-color="#FFF3D6" stop-opacity="0" />
+        </radialGradient>
+        <radialGradient id="s-vig" cx="0.5" cy="0.5" r="0.75">
+          <stop offset="0.6" stop-color="#2B2B2B" stop-opacity="0" />
+          <stop offset="1" stop-color="#2B2B2B" stop-opacity="0.22" />
+        </radialGradient>
+        <clipPath id="s-c1"><rect id="s-c1r" x="0" y="0" width="0" height="80" /></clipPath>
+        <clipPath id="s-c2"><rect id="s-c2r" x="0" y="0" width="0" height="80" /></clipPath>
+        <clipPath id="s-c3"><rect id="s-c3r" x="0" y="0" width="0" height="80" /></clipPath>
+        <clipPath id="s-c4"><rect id="s-c4r" x="0" y="0" width="0" height="80" /></clipPath>
+        <clipPath id="s-scr"><rect id="s-scrr" x="0" y="0" width="10" height="10" rx="8" /></clipPath>
+      </defs>
+
+      <g id="s-cam">
+        <!-- room -->
+        <rect x="-400" y="-300" width="2720" height="1000" fill="#EFE2CF" />
+        <ellipse cx="520" cy="560" rx="760" ry="520" fill="url(#s-lampglow)" opacity="0.38" />
+        <rect x="-400" y="672" width="2720" height="18" fill="#E2D2BC" />
+        <!-- shelf with books -->
+        <g id="s-shelf">
+          <rect class="ink" x="1400" y="300" width="420" height="22" rx="4" fill="#B9805A" />
+          <rect class="ink" x="1440" y="190" width="44" height="110" rx="4" fill="#FFD9C0" />
+          <rect class="ink" x="1490" y="170" width="38" height="130" rx="4" fill="#C9F2DD" />
+          <rect class="ink" x="1534" y="205" width="50" height="95" rx="4" fill="#D9D2FF" />
+          <rect class="ink" x="1600" y="208" width="40" height="92" rx="4" fill="#FFE45C" transform="rotate(14 1620 300)" />
+        </g>
+        <!-- lamp -->
+        <g id="s-lamp">
+          <path d="M 392 486 L 506 512 L 660 690 L 300 690 Z" fill="#FFF3D6" opacity="0.38" />
+          <ellipse cx="300" cy="742" rx="86" ry="22" fill="#2B2B2B" opacity="0.18" />
+          <path class="ink" d="M 230 735 Q 300 700 370 735 Z" fill="#39404D" />
+          <path d="M 300 722 L 270 560 L 410 440" fill="none" stroke="#2B2B2B" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M 300 722 L 270 560 L 410 440" fill="none" stroke="#5B6474" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+          <circle class="ink" cx="270" cy="560" r="14" fill="#39404D" />
+          <path class="ink" d="M 400 404 Q 446 396 474 430 L 512 516 L 384 484 Z" fill="#39404D" />
+          <path class="ink" d="M 388 486 Q 448 528 510 514" fill="#FFF3D6" stroke-width="3" />
+        </g>
+        <!-- plant -->
+        <g id="s-plant">
+          <ellipse cx="1660" cy="742" rx="70" ry="16" fill="#2B2B2B" opacity="0.18" />
+          <path class="ink" d="M 1610 640 L 1710 640 L 1695 740 L 1625 740 Z" fill="#FF7A5C" />
+          <path class="ink" d="M 1660 640 C 1600 600 1590 540 1612 500 C 1650 540 1662 590 1660 640 Z" fill="#5FAF7F" />
+          <path class="ink" d="M 1660 640 C 1700 590 1740 570 1772 572 C 1756 616 1716 640 1660 640 Z" fill="#7BC795" />
+          <path class="ink" d="M 1660 640 C 1650 580 1672 520 1700 490 C 1712 540 1694 600 1660 640 Z" fill="#5FAF7F" />
+        </g>
+
+        <!-- chair + student body (behind the desk) -->
+        <g id="s-body" transform="translate(110 0)">
+          <rect class="ink" x="470" y="430" width="370" height="330" rx="40" fill="#39404D" />
+          <g id="s-torso">
+            <ellipse class="ink" cx="650" cy="528" rx="104" ry="34" fill="#2F49B0" />
+            <path class="ink" d="M 450 700 L 466 604 Q 488 540 592 524 L 716 524 Q 818 540 840 604 L 858 700 Z" fill="#3B5BDB" />
+            <path d="M 470 640 Q 520 610 560 640" fill="none" stroke="#2F49B0" stroke-width="6" stroke-linecap="round" />
+            <rect class="ink" x="626" y="470" width="58" height="66" rx="16" fill="#C98B60" />
+            <path class="ink" d="M 612 520 Q 655 560 698 520" fill="#FFFFFF" />
+            <path d="M 640 548 L 634 618" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" />
+            <path d="M 676 548 L 684 622" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" />
+            <circle class="ink" cx="634" cy="620" r="5" fill="#FFFFFF" stroke-width="3" />
+            <circle class="ink" cx="684" cy="624" r="5" fill="#FFFFFF" stroke-width="3" />
+          </g>
+          <!-- head -->
+          <g id="s-head">
+            <path class="ink" d="M -112 10 C -128 -96 -62 -152 20 -150 C 88 -148 124 -100 112 -36 L 96 -50 C 40 -40 -40 -40 -92 -10 Z" fill="#241812" />
+            <path class="ink" d="M -88 -50 C -92 40 -55 110 10 116 C 62 120 98 80 104 20 C 110 -50 80 -112 10 -118 C -50 -122 -86 -95 -88 -50 Z" fill="#C98B60" />
+            <path d="M -60 70 C -30 108 10 116 40 112 C 10 104 -30 92 -60 70 Z" fill="#B07548" />
+            <ellipse cx="80" cy="40" rx="15" ry="8" fill="#E5735A" opacity="0.32" />
+            <path class="ink" d="M -100 -20 C -118 -100 -60 -150 20 -148 C 84 -146 118 -110 112 -46 C 96 -76 64 -86 34 -76 C 22 -94 -10 -100 -36 -88 C -52 -66 -66 -44 -90 -30 Z" fill="#241812" />
+            <path d="M 12 -96 C 34 -80 62 -74 96 -70" fill="none" stroke="#3A2A20" stroke-width="5" stroke-linecap="round" />
+            <ellipse class="ink" cx="-84" cy="12" rx="18" ry="26" fill="#C98B60" />
+            <path d="M -88 2 Q -78 12 -88 24" fill="none" stroke="#B07548" stroke-width="4" stroke-linecap="round" />
+            <g id="s-eyeN"><ellipse class="ink" cx="8" cy="-10" rx="17" ry="19" fill="#FFFFFF" stroke-width="3" /><circle id="s-pupN" cx="8" cy="-10" r="9" fill="#2B2B2B" /><circle id="s-glN" cx="11" cy="-14" r="3" fill="#FFFFFF" /></g>
+            <g id="s-eyeF"><ellipse class="ink" cx="70" cy="-12" rx="13" ry="18" fill="#FFFFFF" stroke-width="3" /><circle id="s-pupF" cx="70" cy="-12" r="8" fill="#2B2B2B" /><circle id="s-glF" cx="73" cy="-16" r="2.6" fill="#FFFFFF" /></g>
+            <path id="s-browN" d="M -16 -52 Q 8 -64 32 -54" fill="none" stroke="#241812" stroke-width="8" stroke-linecap="round" />
+            <path id="s-browF" d="M 54 -54 Q 70 -62 88 -54" fill="none" stroke="#241812" stroke-width="7" stroke-linecap="round" />
+            <g id="s-glasses" fill="none" stroke="#2B2B2B" stroke-width="5">
+              <ellipse cx="8" cy="-10" rx="33" ry="31" />
+              <ellipse cx="70" cy="-12" rx="25" ry="29" />
+              <path d="M 41 -14 Q 43 -20 45 -14" />
+              <path d="M -25 -12 L -76 -6" />
+            </g>
+            <path class="ink" d="M 98 -4 Q 120 24 98 32" fill="#C98B60" />
+            <path id="s-mouth" class="ink" d="M -12 0 Q 0 4 12 0 Q 0 4 -12 0 Z" fill="#6B2E2A" transform="translate(52 64)" />
+          </g>
+        </g>
+
+        <!-- desk -->
+        <path d="M -400 690 L 2320 690 L 2320 1004 L -400 1004 Z" fill="#B9805A" />
+        <path d="M -400 690 L 2320 690" stroke="#2B2B2B" stroke-width="4" />
+        <path d="M -400 696 L 2320 696" stroke="#D49B70" stroke-width="5" />
+        <path d="M -400 1004 L 2320 1004 L 2320 1300 L -400 1300 Z" fill="#9C6544" stroke="#2B2B2B" stroke-width="4" />
+        <path d="M 120 860 Q 400 850 700 866 M 1180 940 Q 1500 930 1800 946" stroke="#A9714C" stroke-width="4" fill="none" stroke-linecap="round" />
+
+        <!-- pen lying on the desk after writing -->
+        <g id="s-mstand" opacity="0">
+          <ellipse cx="1230" cy="812" rx="150" ry="16" fill="#2B2B2B" opacity="0.2" />
+          <path class="ink" d="M 1210 735 L 1250 735 L 1258 800 L 1202 800 Z" fill="#5B6474" />
+          <path class="ink" d="M 1120 806 Q 1230 786 1340 806 L 1330 816 L 1130 816 Z" fill="#39404D" />
+        </g>
+        <!-- keyboard deck of the laptop -->
+        <g id="s-deck" opacity="0">
+          <ellipse cx="1230" cy="872" rx="300" ry="22" fill="#2B2B2B" opacity="0.18" />
+          <path class="ink" d="M 1000 744 L 1460 744 L 1512 860 L 948 860 Z" fill="#C9CED8" />
+          <path d="M 948 860 L 1512 860 L 1512 872 L 948 872 Z" fill="#9AA1AE" stroke="#2B2B2B" stroke-width="4" stroke-linejoin="round" />
+          <g id="s-keys"></g>
+          <path class="ink" d="M 1170 828 L 1290 828 L 1296 852 L 1164 852 Z" fill="#B6BCC8" stroke-width="3" />
+        </g>
+        <!-- tablet stand -->
+        <g id="s-stand" opacity="0">
+          <ellipse cx="1262" cy="878" rx="170" ry="18" fill="#2B2B2B" opacity="0.2" />
+          <path class="ink" d="M 1200 870 L 1330 870 L 1300 820 L 1230 820 Z" fill="#39404D" />
+        </g>
+
+        <!-- the device: notebook page -> laptop screen -> tablet -->
+        <g id="s-dev">
+          <rect id="s-shadow" x="-254" y="-162" width="520" height="340" rx="6" fill="#2B2B2B" opacity="0.18" />
+          <rect id="s-bezel" x="-276" y="-181" width="552" height="362" rx="14" fill="#1E2128" stroke="#2B2B2B" stroke-width="4" opacity="0" />
+          <rect id="s-paper" class="ink" x="-260" y="-170" width="520" height="340" rx="6" fill="#FFFDF5" />
+          <g id="s-nbdeco">
+            <path d="M -260 -86 L 260 -86 M -260 -30 L 260 -30 M -260 26 L 260 26 M -260 82 L 260 82 M -260 138 L 260 138" stroke="#CFD8EA" stroke-width="3" />
+            <path d="M -204 -170 L -204 170" stroke="#FF9A86" stroke-width="3" />
+            <g id="s-rings" fill="none" stroke="#2B2B2B" stroke-width="5">
+              <path d="M -220 -184 v 26 M -170 -184 v 26 M -120 -184 v 26 M -70 -184 v 26 M -20 -184 v 26 M 30 -184 v 26 M 80 -184 v 26 M 130 -184 v 26 M 180 -184 v 26 M 230 -184 v 26" />
+            </g>
+          </g>
+          <!-- handwriting (written on by the clip rects) -->
+          <g id="s-hw" transform="translate(-260 -170)">
+            <text id="s-h1" class="hand-t" x="70" y="78" font-size="46" textLength="268" lengthAdjust="spacingAndGlyphs" clip-path="url(#s-c1)">Photosynthesis</text>
+            <text id="s-h2" class="hand-t" x="80" y="134" font-size="34" textLength="336" lengthAdjust="spacingAndGlyphs" clip-path="url(#s-c2)">• sunlight + water + CO₂</text>
+            <text id="s-h3" class="hand-t" x="80" y="190" font-size="34" textLength="290" lengthAdjust="spacingAndGlyphs" clip-path="url(#s-c3)">• makes glucose + O₂</text>
+            <text id="s-h4" class="hand-t" x="80" y="246" font-size="34" textLength="350" lengthAdjust="spacingAndGlyphs" clip-path="url(#s-c4)">• happens in chloroplasts</text>
+          </g>
+          <g id="s-mono" data-layout-ignore transform="translate(-150 -195)">
+            <text id="s-m1" class="mono" x="24" y="70" font-size="21"></text>
+            <text id="s-m2" class="mono" x="24" y="106" font-size="19"></text>
+            <text id="s-m3" class="mono" x="24" y="140" font-size="19"></text>
+          </g>
+          <!-- typed text on the laptop -->
+          <g id="s-screen" clip-path="url(#s-scr)" data-layout-ignore>
+            <g id="s-typed" opacity="0">
+              <text id="s-t1" class="typed" x="64" y="78" font-size="34">Photosynthesis</text>
+              <text id="s-t2" class="typed" x="64" y="134" font-size="25">• sunlight + water + CO₂</text>
+              <text id="s-t3" class="typed" x="64" y="190" font-size="25">• makes glucose + O₂</text>
+              <text id="s-t4" class="typed" x="64" y="246" font-size="25">• happens in chloroplasts</text>
+              <text id="s-t5" class="typed" x="64" y="302" font-size="25"></text>
+              <text id="s-t6" class="typed" x="64" y="358" font-size="25"></text>
+              <text id="s-t7" class="typed" x="64" y="414" font-size="25"></text>
+            </g>
+            <!-- tablet UI -->
+            <g id="s-tab" opacity="0">
+              <rect x="-200" y="-260" width="400" height="520" fill="#FFFFFF" />
+              <g id="s-list"></g>
+              <rect x="-200" y="-260" width="400" height="100" fill="#FFFFFF" />
+              <path d="M -200 -160 L 200 -160" stroke="#E4E4E4" stroke-width="3" />
+              <text class="ui" x="-140" y="-178" font-size="26">My notes</text>
+              <circle class="ink" cx="118" cy="-188" r="18" fill="#FFE45C" stroke-width="3" />
+              <path d="M 118 -197 v 10 M 111 -187 a 7 7 0 0 0 14 0 M 118 -180 v 5" fill="none" stroke="#2B2B2B" stroke-width="3" stroke-linecap="round" />
+              <circle id="s-ripple" cx="0" cy="0" r="10" fill="none" stroke="#3B5BDB" stroke-width="5" opacity="0" />
+            </g>
+            <!-- voice UI -->
+            <g id="s-vui" opacity="0">
+              <rect x="-200" y="-260" width="400" height="520" fill="#FFFFFF" />
+              <circle class="ink" cx="0" cy="-120" r="44" fill="#FFE45C" />
+              <path d="M 0 -142 v 26 M -17 -118 a 17 17 0 0 0 34 0 M 0 -101 v 12" fill="none" stroke="#2B2B2B" stroke-width="5" stroke-linecap="round" />
+              <g id="s-bars"></g>
+              <g id="s-answer" opacity="0">
+                <rect class="ink" x="-140" y="40" width="280" height="150" rx="16" fill="#C9F2DD" />
+                <text class="ui" x="-118" y="80" font-size="22">✦ From your notes</text>
+                <rect x="-118" y="100" width="230" height="12" rx="6" fill="#2B2B2B" opacity="0.28" />
+                <rect x="-118" y="124" width="200" height="12" rx="6" fill="#2B2B2B" opacity="0.28" />
+                <rect x="-118" y="148" width="150" height="12" rx="6" fill="#2B2B2B" opacity="0.28" />
+              </g>
+            </g>
+          </g>
+          <rect id="s-cam-dot" x="-4" y="-176" width="8" height="8" rx="4" fill="#5B6474" opacity="0" />
+        </g>
+
+        <!-- the typewriter: body in front of its paper -->
+        <g id="s-tw">
+          <ellipse cx="1200" cy="868" rx="250" ry="22" fill="#2B2B2B" opacity="0.2" />
+          <g id="s-roller">
+            <rect class="ink" x="1000" y="676" width="400" height="40" rx="20" fill="#2B2F35" />
+            <circle class="ink" cx="992" cy="696" r="18" fill="#4B5A50" />
+            <circle class="ink" cx="1408" cy="696" r="18" fill="#4B5A50" />
+            <path d="M 1030 690 L 1370 690" stroke="#5B6474" stroke-width="4" />
+          </g>
+          <path class="ink" d="M 1040 716 L 1360 716 L 1410 860 L 990 860 Z" fill="#2F3A33" />
+          <path class="ink" d="M 1110 716 Q 1200 760 1290 716 Z" fill="#1E2621" />
+          <path d="M 1000 840 L 1400 840" stroke="#4B5A50" stroke-width="5" />
+          <g id="s-twkeys"></g>
+          <rect class="ink" x="1120" y="842" width="160" height="12" rx="6" fill="#C9CED8" stroke-width="3" />
+        </g>
+        <!-- pen -->
+        <g id="s-pen">
+          <path class="ink" d="M 0 0 L 9 -14 L 104 -150 L 92 -158 L -3 -22 Z" fill="#2B2B2B" />
+          <path d="M 4 -12 L 98 -146" stroke="#3B5BDB" stroke-width="10" stroke-linecap="round" />
+          <path class="ink" d="M 78 -122 L 104 -150 L 92 -158 L 68 -128 Z" fill="#FFE45C" stroke-width="3" />
+        </g>
+
+        <!-- arms (far first) -->
+        <g id="s-armF">
+          <path id="s-armF-o" d="M 0 0 L 1 1" stroke="#2B2B2B" stroke-width="68" stroke-linecap="round" fill="none" />
+          <path id="s-armF-i" d="M 0 0 L 1 1" stroke="#2F49B0" stroke-width="60" stroke-linecap="round" fill="none" />
+          <path id="s-armF-o2" d="M 0 0 L 1 1" stroke="#2B2B2B" stroke-width="60" stroke-linecap="round" fill="none" />
+          <path id="s-armF-i2" d="M 0 0 L 1 1" stroke="#2F49B0" stroke-width="52" stroke-linecap="round" fill="none" />
+          <g id="s-handF"></g>
+        </g>
+        <g id="s-armN">
+          <path id="s-armN-o" d="M 0 0 L 1 1" stroke="#2B2B2B" stroke-width="72" stroke-linecap="round" fill="none" />
+          <path id="s-armN-i" d="M 0 0 L 1 1" stroke="#3B5BDB" stroke-width="64" stroke-linecap="round" fill="none" />
+          <path id="s-armN-o2" d="M 0 0 L 1 1" stroke="#2B2B2B" stroke-width="64" stroke-linecap="round" fill="none" />
+          <path id="s-armN-i2" d="M 0 0 L 1 1" stroke="#3B5BDB" stroke-width="56" stroke-linecap="round" fill="none" />
+          <g id="s-handN"></g>
+        </g>
+
+        <!-- voice waves -->
+        <g id="s-waves"></g>
+      </g>
+      <rect id="s-dim" x="0" y="0" width="1920" height="1080" fill="#1A1410" opacity="0" pointer-events="none" />
+      <rect x="0" y="0" width="1920" height="1080" fill="url(#s-vig)" pointer-events="none" />
+      <g id="s-carry">
+        <rect x="-300" y="-390" width="600" height="780" rx="6" fill="#FBF7EC" stroke="#2B2B2B" stroke-width="4" />
+        <g id="s-carrylines"></g>
+      </g>
+    </svg>
+  </div>
+  <script>
+    (() => {
+      const NS = "http://www.w3.org/2000/svg", $ = (id) => document.getElementById(id);
+      const mk = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; };
+      // ---------- easing + keyframes
+      const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x)), lerp = (a, b, p) => a + (b - a) * p;
+      const E = { lin: (p) => p, io: (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2), out: (p) => 1 - Math.pow(1 - p, 4),
+                  expo: (p) => (p >= 1 ? 1 : 1 - Math.pow(2, -10 * p)), in3: (p) => p * p * p, io2: (p) => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2) };
+      const seg = (t, a, b, ease = "io") => E[ease](cl((t - a) / (b - a)));
+      // keyframes: [[t, value, ease-into-this-key], ...] ; values numbers or arrays
+      function kf(t, keys) {
+        if (t <= keys[0][0]) return keys[0][1];
+        for (let i = 1; i < keys.length; i++) {
+          const [t1, v1, e] = keys[i], [t0, v0] = keys[i - 1];
+          if (t <= t1) { const p = E[e || "io"]((t - t0) / (t1 - t0)); return Array.isArray(v0) ? v0.map((x, j) => lerp(x, v1[j], p)) : lerp(v0, v1, p); }
+        }
+        return keys[keys.length - 1][1];
+      }
+      const hash = (n) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+
+      // ---------- static builds (not timed elements)
+      const keys = $("s-keys");
+      for (let r = 0; r < 4; r++) {
+        const y = 760 + r * 17, f = (y - 744) / 116, x0 = lerp(1000, 948, f) + 18, x1 = lerp(1460, 1512, f) - 18, n = 13, w = (x1 - x0) / n;
+        for (let i = 0; i < n; i++) mk("rect", { x: x0 + i * w + 2, y, width: w - 5, height: 12, rx: 3, fill: "#EEF0F4", stroke: "#2B2B2B", "stroke-width": 2 }, keys);
+      }
+      const list = $("s-list"), CARDS = [["Photosynthesis", "#FFE45C"], ["Calvin cycle", "#C9F2DD"], ["Light reactions", "#FFD0C2"], ["Chloroplasts", "#D9D2FF"], ["Leaf structure", "#BFD4FF"]];
+      const CARDS2 = [["Mitochondria", "#FFD0C2"], ["Cell membrane", "#C9F2DD"], ["Nucleus", "#FFE45C"], ["Ribosomes", "#D9D2FF"], ["Cell wall", "#BFD4FF"]];
+      const cardEls = [];
+      [CARDS, CARDS2].forEach((set, page) => set.forEach(([title, col], i) => {
+        const g = mk("g", { transform: `translate(${page * 360} ${-142 + i * 110})` }, list);
+        const bg = mk("rect", { x: -146, y: 0, width: 292, height: 94, rx: 14, fill: "#FFFFFF", stroke: "#2B2B2B", "stroke-width": 3 }, g);
+        mk("rect", { x: -146, y: 0, width: 16, height: 94, rx: 6, fill: col, stroke: "#2B2B2B", "stroke-width": 3 }, g);
+        const tx = mk("text", { x: -114, y: 36, class: "ui", "font-size": 22 }, g); tx.textContent = title;
+        mk("rect", { x: -114, y: 52, width: 210, height: 10, rx: 5, fill: "#2B2B2B", opacity: 0.22 }, g);
+        mk("rect", { x: -114, y: 70, width: 150, height: 10, rx: 5, fill: "#2B2B2B", opacity: 0.22 }, g);
+        cardEls.push(bg);
+      }));
+      const bars = [];
+      for (let i = 0; i < 13; i++) bars.push(mk("rect", { x: -126 + i * 20, y: -20, width: 12, height: 20, rx: 6, fill: i % 2 ? "#3B5BDB" : "#FFE45C", stroke: "#2B2B2B", "stroke-width": 2.5 }, $("s-bars")));
+      // hands: three poses per hand (fist with pen, flat, pointing)
+      function buildHand(g) {
+        const fist = mk("g", {}, g);
+        mk("circle", { cx: 0, cy: 0, r: 30, fill: "#C98B60", class: "ink" }, fist);
+        mk("path", { d: "M -14 -20 Q 6 -32 22 -14", fill: "none", stroke: "#B07548", "stroke-width": 4, "stroke-linecap": "round" }, fist);
+        mk("ellipse", { cx: -18, cy: -14, rx: 13, ry: 10, fill: "#C98B60", class: "ink", "stroke-width": 3 }, fist);
+        const flat = mk("g", {}, g);
+        mk("path", { d: "M -34 -8 Q -30 -30 0 -30 Q 34 -30 40 -6 Q 42 18 10 22 Q -28 24 -34 -8 Z", fill: "#C98B60", class: "ink" }, flat);
+        mk("path", { d: "M 6 -28 L 6 -12 M 20 -26 L 20 -10 M -8 -28 L -8 -12", stroke: "#B07548", "stroke-width": 4, "stroke-linecap": "round" }, flat);
+        const point = mk("g", {}, g);
+        mk("rect", { x: -9, y: -66, width: 18, height: 52, rx: 9, fill: "#C98B60", class: "ink", transform: "rotate(-28)" }, point);
+        mk("circle", { cx: 0, cy: 0, r: 30, fill: "#C98B60", class: "ink" }, point);
+        mk("path", { d: "M -16 -18 Q 0 -28 16 -18", fill: "none", stroke: "#B07548", "stroke-width": 4, "stroke-linecap": "round" }, point);
+        return { fist, flat, point };
+      }
+      const HN = buildHand($("s-handN")), HF = buildHand($("s-handF"));
+      const waves = [];
+      for (let i = 0; i < 6; i++) {
+        const g = mk("g", { opacity: 0 }, $("s-waves"));
+        mk("path", { d: "M 0 -34 Q 26 0 0 34", fill: "none", stroke: "#2B2B2B", "stroke-width": 15, "stroke-linecap": "round" }, g);
+        mk("path", { d: "M 0 -34 Q 26 0 0 34", fill: "none", stroke: "#FFE45C", "stroke-width": 8, "stroke-linecap": "round" }, g);
+        waves.push(g);
+      }
+
+      // ---------- the film's clock (seconds, local to this scene; it starts at 19.2 s in the film)
+      const FREEZE = 15.7;
+      const camKeys = [[0, [1.7, 1200, 600]], [0.9, [1.7, 1200, 600]], [2.1, [1.3, 1100, 640], "io"], [5.3, [1.3, 1100, 640]], [6.5, [1.45, 1040, 600], "io"],
+                       [9.6, [1.45, 1040, 600]], [10.5, [1.22, 930, 590], "io"], [12.2, [1.22, 930, 590]], [15.6, [1.3, 950, 578], "io"]];
+      // device: [x, y, rot, sy, W, H, rx, bezel]: typewriter paper -> monitor -> (laptop) -> tablet -> tablet on its stand
+      const devKeys = [[0, [1200, 590, 0, 1, 300, 390, 3, 0]], [3.6, [1200, 590, 0, 1, 300, 390, 3, 0]], [4.5, [1230, 579, 0, 1, 470, 300, 10, 16], "io"],
+                       [5.7, [1230, 579, 0, 1, 470, 300, 10, 16]], [6.5, [1150, 600, 0, 1, 330, 440, 30, 18], "io"],
+                       [9.6, [1150, 600, 0, 1, 330, 440, 30, 18]], [10.4, [1262, 622, 5, 1, 330, 440, 30, 18], "io"]];
+      const TW = [[1.05, 1.85, "PHOTOSYNTHESIS"], [1.95, 2.7, "light + water + CO2"], [2.8, 3.5, "= glucose + oxygen"]];
+      const POP = [4.4, 4.55, 4.7];                               // lines that appear instantly on the computer
+      const BLINKS = [2.4, 5.0, 8.2, 10.9, 15.35];
+      const SX = 110, SH_N = [812 + SX, 588], SH_F = [566 + SX, 592], UPPER = 230, FORE = 260;
+      let shoulderShift = [0, 0];
+      // new text for the screen lines, and things this scene does not use
+      [["s-t1", "Photosynthesis"], ["s-t2", "• light + water + CO₂"], ["s-t3", "• → glucose + oxygen"], ["s-t4", "• happens in chloroplasts"], ["s-t5", "• Calvin cycle fixes CO₂"], ["s-t6", "• needs light, CO₂, warmth"], ["s-t7", ""]].forEach(([id, v]) => ($(id).textContent = v));
+      ["s-hw", "s-nbdeco", "s-pen"].forEach((id) => $(id).setAttribute("opacity", 0));
+      for (let r = 0; r < 4; r++) for (let i = 0; i < 10 - (r % 2); i++) mk("circle", { cx: 1062 + i * 30 + (r % 2) * 15 - r * 6, cy: 748 + r * 24, r: 10, fill: "#E9E3D2", stroke: "#2B2B2B", "stroke-width": 3 }, $("s-twkeys"));
+      for (let i = 0; i < 12; i++) mk("rect", { x: -240, y: -320 + i * 56 + (i > 0 ? 40 : 0), width: i === 0 ? 300 : 480 - hash(i + 3) * 120, height: i === 0 ? 30 : 14, rx: 4, fill: "#2B2B2B", opacity: i === 0 ? 0.8 : 0.55 }, $("s-carrylines"));
+
+
+      function devToWorld(d, px, py) {               // device-local point -> world
+        const r = (d[2] * Math.PI) / 180, x = px, y = py * d[3];
+        return [d[0] + x * Math.cos(r) - y * Math.sin(r), d[1] + x * Math.sin(r) + y * Math.cos(r)];
+      }
+      function setArm(side, hand, pose, fingerAngle) {
+        const base = side === "N" ? SH_N : SH_F, H = side === "N" ? HN : HF, S = [base[0] + shoulderShift[0], base[1] + shoulderShift[1]];
+        const dx = hand[0] - S[0], dy = hand[1] - S[1], dist = Math.hypot(dx, dy) || 1, th = Math.atan2(dy, dx);
+        const dc = cl(dist, Math.abs(UPPER - FORE) + 2, UPPER + FORE - 2), al = Math.acos(cl((UPPER * UPPER + dc * dc - FORE * FORE) / (2 * UPPER * dc), -1, 1));
+        const e1 = [S[0] + UPPER * Math.cos(th + al), S[1] + UPPER * Math.sin(th + al)], e2 = [S[0] + UPPER * Math.cos(th - al), S[1] + UPPER * Math.sin(th - al)];
+        const el = e1[1] > e2[1] ? e1 : e2;                     // the elbow hangs down, onto the desk
+        const fx = hand[0] - el[0], fy = hand[1] - el[1], L = Math.hypot(fx, fy) || 1, wr = [hand[0] - (fx / L) * 24, hand[1] - (fy / L) * 24];
+        const du = `M ${S[0]} ${S[1]} L ${el[0]} ${el[1]}`, df = `M ${el[0]} ${el[1]} L ${wr[0]} ${wr[1]}`;
+        $(`s-arm${side}-o`).setAttribute("d", du); $(`s-arm${side}-i`).setAttribute("d", du); $(`s-arm${side}-o2`).setAttribute("d", df); $(`s-arm${side}-i2`).setAttribute("d", df);
+        $(`s-hand${side}`).setAttribute("transform", `translate(${hand[0]} ${hand[1]}) rotate(${fingerAngle || 0})`);
+        H.fist.setAttribute("opacity", pose === "fist" ? 1 : 0); H.flat.setAttribute("opacity", pose === "flat" ? 1 : 0); H.point.setAttribute("opacity", pose === "point" ? 1 : 0);
+      }
+
+
+      function render(T) {
+        const t = Math.min(T, FREEZE);
+        const lean = kf(t, [[0, 0], [11.0, 0], [11.5, 16, "io"], [14.55, 16], [14.62, 9, "out"], [14.8, 2, "out"], [15.5, 6, "io"]]);
+        const breathe = Math.sin(t * 1.6) * 2.2;
+        shoulderShift = [lean * 0.4, breathe * 0.5];
+        const [cs, cx, cy] = kf(t, camKeys);
+        $("s-cam").setAttribute("transform", `translate(960 540) scale(${cs}) translate(${-cx} ${-cy})`);
+        // ---------- the device
+        const d = kf(t, devKeys), [W, H, RX, BZ] = [d[4], d[5], d[6], d[7]];
+        // typewriter carriage: the paper slides left as each letter is struck, and returns at the end of a line
+        let carriage = 0;
+        for (let i = 0; i < TW.length; i++) {
+          const [a, b, txt] = TW[i];
+          if (t >= a && t <= b) { carriage = 70 - Math.round(seg(t, a, b, "lin") * txt.length) * 7; break; }
+          const nx = TW[i + 1]; if (t > b && (!nx || t < nx[0])) { const back = nx ? seg(t, b, b + 0.12, "out") : seg(t, 3.5, 3.75, "io"); carriage = lerp(70 - txt.length * 7, nx ? 70 : 0, back); break; }
+        }
+        if (t < TW[0][0]) carriage = 70 * seg(t, 0.85, 1.05);
+        $("s-dev").setAttribute("transform", `translate(${d[0] + carriage} ${d[1]}) rotate(${d[2]})`);
+        $("s-roller").setAttribute("transform", `translate(${carriage} 0)`);
+        const P = $("s-paper"); P.setAttribute("x", -W / 2); P.setAttribute("y", -H / 2); P.setAttribute("width", W); P.setAttribute("height", H); P.setAttribute("rx", RX);
+        P.setAttribute("fill", BZ < 8 ? "#FBF7EC" : "#FFFFFF");
+        const B = $("s-bezel"); B.setAttribute("x", -W / 2 - BZ); B.setAttribute("y", -H / 2 - BZ); B.setAttribute("width", W + 2 * BZ); B.setAttribute("height", H + 2 * BZ); B.setAttribute("rx", RX + BZ * 0.6);
+        B.setAttribute("opacity", cl(BZ / 10));
+        const S = $("s-shadow"); S.setAttribute("x", -W / 2 - BZ); S.setAttribute("y", H / 2 - 6); S.setAttribute("width", W + 2 * BZ); S.setAttribute("height", 26 + BZ); S.setAttribute("rx", 13); S.setAttribute("opacity", 0.18 * seg(t, 9.6, 10.4));
+        const sr = $("s-scrr"); sr.setAttribute("x", -W / 2); sr.setAttribute("y", -H / 2); sr.setAttribute("width", W); sr.setAttribute("height", H); sr.setAttribute("rx", Math.max(4, RX - 6));
+        $("s-cam-dot").setAttribute("y", -H / 2 - BZ / 2 - 4); $("s-cam-dot").setAttribute("opacity", cl(BZ / 16));
+        // typewriter body out, monitor stand in (then out: a laptop), keyboard deck in (then out: a tablet)
+        const twOut = seg(t, 3.6, 4.05, "in3"); $("s-tw").setAttribute("opacity", 1 - twOut); $("s-tw").setAttribute("transform", `translate(0 ${twOut * 40})`);
+        const stIn = seg(t, 4.05, 4.45, "out"), stOut = seg(t, 5.25, 5.6, "in3");
+        $("s-mstand").setAttribute("opacity", stIn * (1 - stOut)); $("s-mstand").setAttribute("transform", `translate(0 ${stOut * 40})`);
+        const deckIn = seg(t, 3.75, 4.3, "expo"), deckOut = seg(t, 5.6, 5.95, "in3");
+        $("s-deck").setAttribute("opacity", t < 3.75 ? 0 : deckIn * (1 - deckOut)); $("s-deck").setAttribute("transform", `translate(0 ${(1 - deckIn) * 50 + deckOut * 70})`);
+        $("s-stand").setAttribute("opacity", seg(t, 9.9, 10.3, "out"));
+        // typed letters on the paper (struck one by one), then the same words become screen text
+        TW.forEach(([a, b, txt], i) => { $(`s-m${i + 1}`).textContent = txt.slice(0, Math.round(seg(t, a, b, "lin") * txt.length)); });
+        const mOut = seg(t, 3.7, 3.95, "in3"); $("s-mono").setAttribute("opacity", 1 - mOut); $("s-mono").style.filter = mOut > 0 ? `blur(${mOut * 8}px)` : "none";
+        $("s-mono").setAttribute("transform", `translate(${-W / 2} ${-H / 2})`);
+        $("s-typed").setAttribute("opacity", t >= 3.85 && t < 6.2 ? 1 - seg(t, 5.65, 5.95, "in3") : 0);
+        [1, 2, 3].forEach((i) => { const tin = seg(t, 3.85 + i * 0.08, 4.2 + i * 0.08, "out"), te = $(`s-t${i}`); te.setAttribute("opacity", tin); te.style.filter = tin < 1 ? `blur(${(1 - tin) * 8}px)` : "none"; });
+        POP.forEach((a, i) => $(`s-t${i + 4}`).setAttribute("opacity", t >= a ? 1 : 0));
+        $("s-t7").setAttribute("opacity", 0);
+        const scroll = kf(t, [[0, 0], [4.5, 0], [4.62, 40, "out"], [4.7, 40], [4.82, 96, "out"]]);
+        $("s-typed").setAttribute("transform", `translate(${-W / 2} ${-H / 2 - scroll})`);
+        // ---------- tablet: tap, swipe, scroll
+        const tabOn = seg(t, 6.2, 6.5, "out") * (1 - seg(t, 11.1, 11.35, "in3"));
+        $("s-tab").setAttribute("opacity", tabOn);
+        const swipe = seg(t, 7.6, 8.05, "expo"), scr = seg(t, 8.6, 9.1, "out");
+        $("s-list").setAttribute("transform", `translate(${-360 * swipe} ${-150 * scr})`);
+        cardEls[1].setAttribute("fill", t >= 6.9 ? "#D9D2FF" : "#FFFFFF");
+        const rp = seg(t, 6.9, 7.3, "out"), rip = $("s-ripple");
+        rip.setAttribute("cx", 30); rip.setAttribute("cy", 14); rip.setAttribute("r", 10 + rp * 70); rip.setAttribute("opacity", t >= 6.9 && t < 7.3 ? 0.8 * (1 - rp) : 0);
+        // ---------- voice: the room goes quiet, the tablet listens, then answers
+        $("s-dim").setAttribute("opacity", 0.26 * seg(t, 10.4, 11.1));
+        $("s-vui").setAttribute("opacity", seg(t, 11.15, 11.45, "out"));
+        const level = cl((t - 12.5) / 0.3) * (1 - seg(t, 14.35, 14.7, "in3"));
+        bars.forEach((b, i) => { const h = 18 + level * (24 + 46 * Math.abs(Math.sin(t * 9 + i * 0.9) * Math.sin(t * 3.7 + i * 1.7))); b.setAttribute("height", h); b.setAttribute("y", -10 - h / 2); });
+        const ans = seg(t, 14.4, 14.8, "expo"), A = $("s-answer");
+        A.setAttribute("opacity", ans); A.setAttribute("transform", `translate(0 ${(1 - ans) * 40}) scale(${0.92 + 0.08 * ans})`);
+        $("s-bars").setAttribute("transform", `translate(0 ${-40 * ans})`);
+        // ---------- the printed page from the press lands in the typewriter
+        const land = seg(t, 0, 0.9, "io"), cAt = [(1200 - 1200) * 1.7 + 960, (590 - 600) * 1.7 + 540];
+        $("s-carry").setAttribute("transform", `translate(${lerp(960, cAt[0], land)} ${lerp(540, cAt[1], land)}) scale(${lerp(3.4, 0.85, land)})`);
+        $("s-carry").setAttribute("opacity", t < 0.9 ? 1 : 0); $("s-carrylines").setAttribute("opacity", 1 - seg(t, 0.45, 0.85));
+
+        // ---------- hands
+        let hN, poseN = "flat", angN = 0, hF, poseF = "flat";
+        const tap = (ph, on) => -8 * Math.max(0, Math.sin(t * 15 + ph)) * (on ? 1 : 0);
+        const twN = [1280, 818], twF = [1096, 812], kN = [1300, 834], kF = [1084, 826];
+        const typingTW = t > 1.0 && t < 3.5, typingKB = t > 4.3 && t < 5.25;
+        if (t < 3.6) { hN = [twN[0] + carriage * 0.15, twN[1] + tap(0, typingTW) - (t < 1.0 ? 14 : 0)]; hF = [twF[0] + carriage * 0.15, twF[1] + tap(1.9, typingTW) - (t < 1.0 ? 10 : 0)]; }
+        else if (t < 4.3) { const p = seg(t, 3.6, 4.3, "io"); hN = [lerp(twN[0], kN[0], p), lerp(twN[1], kN[1], p) - 20 * Math.sin(Math.PI * p)]; hF = [lerp(twF[0], kF[0], p), lerp(twF[1], kF[1], p) - 16 * Math.sin(Math.PI * p)]; }
+        else if (t < 5.6) { hN = [kN[0] + 14 * Math.sin(t * 2.1), kN[1] + tap(0, typingKB)]; hF = [kF[0] + 10 * Math.sin(t * 1.7 + 1), kF[1] + tap(1.9, typingKB)]; }
+        else {
+          const tipPath = [[5.6, [90, 190]], [6.5, [90, 70], "io"], [6.8, [34, 10], "io"], [6.9, [30, 14], "out"], [7.1, [60, -10], "io"], [7.45, [96, 30], "io"], [7.6, [96, 30]],
+                           [8.05, [-100, 30], "expo"], [8.3, [-60, 120], "io"], [8.6, [10, 140], "io"], [9.1, [10, -10], "out"], [9.4, [40, 40], "io"], [9.6, [-40, 190], "io"]];
+          const fl = kf(t, tipPath), dd = kf(t, devKeys), ft = devToWorld(dd, fl[0], fl[1]), fingerHand = [ft[0] + 26, ft[1] + 56];
+          const hold = devToWorld(dd, -70, 205), rest = [980, 864], fRest = [930, 858];
+          if (t < 9.6) { hN = t < 5.9 ? [lerp(kN[0], fingerHand[0], seg(t, 5.6, 5.9)), lerp(kN[1], fingerHand[1], seg(t, 5.6, 5.9))] : fingerHand; poseN = t < 5.75 ? "flat" : "point"; }
+          else if (t < 10.4) { const p = seg(t, 9.6, 9.8, "io"); hN = [lerp(fingerHand[0], hold[0], p), lerp(fingerHand[1], hold[1], p)]; }
+          else { const p = seg(t, 10.35, 10.8, "io"); hN = [lerp(hold[0], rest[0], p), lerp(hold[1], rest[1], p)]; }
+          hF = t < 6.2 ? [lerp(kF[0], fRest[0], seg(t, 5.6, 6.2)), lerp(kF[1], fRest[1], seg(t, 5.6, 6.2))] : fRest;
+        }
+        setArm("F", hF, poseF, 0); setArm("N", hN, poseN, angN);
+
+        // ---------- acting
+        const tilt = kf(t, [[0, 8], [3.6, 8], [4.4, 2, "io"], [5.5, 2], [6.2, 4, "io"], [10.8, 4], [11.4, 6, "io"], [14.55, 6], [14.75, -4, "out"], [15.2, 0, "io"], [15.5, -3, "io"]]);
+        const squash = t > 14.5 && t < 14.62 ? 0.965 : t >= 14.62 && t < 14.78 ? 1.03 : 1;
+        $("s-torso").setAttribute("transform", `translate(${lean * 0.4} ${breathe * 0.5})`);
+        const headY = 392 + breathe + (t > 14.5 && t < 14.62 ? 6 : 0) - (t >= 14.62 && t < 14.78 ? 6 : 0);
+        $("s-head").setAttribute("transform", `translate(${660 + lean} ${headY}) rotate(${tilt}) scale(1 ${squash})`);
+        const look = kf(t, [[0, [8, 7]], [1.0, [8, 8], "io"], [3.6, [8, 8]], [4.2, [9, 0], "io"], [5.5, [9, 0]], [6.0, [9, 3], "io"], [9.6, [9, 3]], [10.2, [9, 6], "io"], [10.8, [10, 1], "io"], [14.55, [10, 1]], [14.7, [7, -1], "out"]]);
+        let open = kf(t, [[0, 1], [14.55, 1], [14.62, 0.8], [14.7, 1.28, "out"], [15.05, 1.22], [15.4, 1.05, "io"]]);
+        for (const b of BLINKS) if (t >= b && t < b + 0.13) open *= Math.abs(Math.cos(((t - b) / 0.13) * Math.PI)) * 0.9 + 0.05;
+        [["N", 8, -10], ["F", 70, -12]].forEach(([s, ex, ey]) => {
+          $(`s-eye${s}`).setAttribute("transform", `translate(${ex} ${ey}) scale(1 ${open}) translate(${-ex} ${-ey})`);
+          $(`s-pup${s}`).setAttribute("cx", ex + look[0] * (s === "F" ? 0.6 : 0.75)); $(`s-pup${s}`).setAttribute("cy", ey + look[1] * 0.7);
+          $(`s-gl${s}`).setAttribute("cx", ex + 3 + look[0] * 0.6); $(`s-gl${s}`).setAttribute("cy", ey - 4 + look[1] * 0.6);
+        });
+        // brows: focused -> curious (one up) -> surprised -> realization (a settled, raised look)
+        const bN = kf(t, [[0, 2], [11.0, 2], [11.4, -3, "io"], [14.55, -3], [14.72, -15, "out"], [15.05, -13], [15.4, -6, "io"]]);
+        const bF = kf(t, [[0, 2], [11.0, 2], [11.4, -11, "io"], [14.55, -11], [14.72, -16, "out"], [15.05, -14], [15.4, -7, "io"]]);
+        $("s-browN").setAttribute("transform", `translate(0 ${bN})`); $("s-browF").setAttribute("transform", `translate(0 ${bF}) rotate(${bF < -8 ? -4 : 0} 70 -56)`);
+        let m = kf(t, [[0, [24, 0, 1]], [11.0, [24, 0, 1]], [11.4, [20, 0, -1], "io"], [12.3, [20, 0, -1]], [12.4, [22, 4, 0]], [14.3, [22, 4, 0]], [14.62, [20, 0, 0], "out"], [14.72, [22, 26, -2], "out"], [15.0, [22, 24, -2]], [15.4, [40, 8, 6], "io"]]);
+        if (t > 12.4 && t < 14.3) { const syl = Math.abs(Math.sin(t * 17) * Math.sin(t * 5.3 + 0.4)); m = [22 + 8 * syl, 3 + 15 * syl, 1]; }
+        const [mw, mo, ms] = m, cTop = ms * 0.5 - mo * 0.25, cBot = ms * 0.9 + mo;
+        $("s-mouth").setAttribute("d", `M ${-mw / 2} ${-ms} Q 0 ${cTop} ${mw / 2} ${-ms} Q 0 ${cBot} ${-mw / 2} ${-ms} Z`);
+        // voice waves: mouth -> tablet while the student speaks
+        const mouth = [660 + SX + lean + 64, headY + 66], dd2 = kf(t, devKeys), target = devToWorld(dd2, -150, -60);
+        waves.forEach((g, i) => {
+          const start = 12.5 + (i % 3) * 0.24 + (i >= 3 ? 0.8 : 0), p = (t - start) / 0.62;
+          if (p <= 0 || p >= 1) { g.setAttribute("opacity", 0); return; }
+          const x = lerp(mouth[0], target[0], E.out(p)), y = lerp(mouth[1], target[1], E.out(p));
+          g.setAttribute("opacity", Math.sin(Math.PI * p)); g.setAttribute("transform", `translate(${x} ${y}) scale(${0.55 + 0.9 * p})`);
+        });
+      }
+
+      const tl = gsap.timeline({ paused: true }), clock = { t: 0 };
+      tl.to(clock, { t: 15.9, duration: 15.9, ease: "none", onUpdate: () => render(clock.t) }, 0);
+      render(0);
+      window.__timelines["modern"] = tl;
+    })();
+  </script>
+</template>

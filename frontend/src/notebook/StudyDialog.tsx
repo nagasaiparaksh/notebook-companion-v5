@@ -21,6 +21,8 @@ const shuffle = <T,>(a: T[]) => { const b = [...a]; for (let i = b.length - 1; i
 export default function StudyDialog({ noteId, sheetIndex, sheetCount, initialMode, initialScope, voice, onAddSheet, onAddNote, onGoToSheet, onClose }: P) {
   const [mode, setMode] = useState<StudyMode>(initialMode), [scope, setScope] = useState<Scope>(initialScope), [noted, setNoted] = useState<Set<any>>(new Set());
   const [data, setData] = useState<Record<string, any>>({}), [busy, setBusy] = useState(false), [err, setErr] = useState(""), [secs, setSecs] = useState(0), run = useRef(0), closeBtn = useRef<HTMLButtonElement>(null);
+  // a spoken "make flashcards" / "what did I miss?" while the dialog is already open switches to that tab
+  useEffect(() => { setMode(initialMode); setScope(initialScope); }, [initialMode, initialScope]);
   const key = mode + ":" + scope, cur = data[key];
   /** Quizzes and flashcards arrive in two parts: a few right away (a few seconds), the rest while the student is already answering. */
   const load = async (force = false) => {

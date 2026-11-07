@@ -1,0 +1,95 @@
+1
+00:00:25,123 --> 00:00:29,946
+This is Notebook Companion: a voice-first study notebook for students, built on Gnani's speech models.
+
+2
+00:00:29,948 --> 00:00:31,778
+Let me show you why it's worth switching to.
+
+3
+00:00:33,338 --> 00:00:34,938
+Everyone gets their own private account.
+
+4
+00:00:34,968 --> 00:00:37,738
+Pick a username and a password, and you land on a clean home page:
+
+5
+00:00:37,775 --> 00:00:42,775
+a guided tour, a button for a new notebook, and one short notebook that explains what the app can do.
+
+6
+00:00:43,273 --> 00:00:45,988
+Open a new notebook, tap the mic, and just talk.
+
+7
+00:00:52,888 --> 00:00:57,535
+Gnani Prisma turns your speech into text, in English, ten Indian languages, or a mix of them,
+
+8
+00:00:57,563 --> 00:00:59,517
+and your words appear on the page as neat notes.
+
+9
+00:00:59,982 --> 00:01:02,282
+It's not only dictation. Ask it to write.
+
+10
+00:01:02,294 --> 00:01:04,717
+A heading, a short summary, and a diagram:
+
+11
+00:01:05,705 --> 00:01:09,121
+the AI writes the notes and draws the diagram right onto the sheet.
+
+12
+00:01:10,177 --> 00:01:12,892
+Edit the same way. Change the heading to Food From Light.
+
+13
+00:01:13,132 --> 00:01:16,432
+Changed your mind? Say undo. Every change can be taken back.
+
+14
+00:01:16,927 --> 00:01:19,112
+The Companion knows every sheet of your notebook.
+
+15
+00:01:19,119 --> 00:01:24,119
+Ask it anything, and it answers from your own notes, in short sentences that Gnani Timbre can read aloud.
+
+16
+00:01:24,971 --> 00:01:28,794
+When it's time to revise, Study turns your notes into a quiz, with explanations.
+
+17
+00:01:28,812 --> 00:01:31,819
+There are flashcards too, and a check of what your notes are missing.
+
+18
+00:01:32,437 --> 00:01:34,152
+Upload your syllabus or slides.
+
+19
+00:01:34,176 --> 00:01:37,415
+The app learns your course's own terms, so technical words are spelled right,
+
+20
+00:01:37,427 --> 00:01:40,142
+and it shows how much of the syllabus your notes already cover.
+
+21
+00:01:40,942 --> 00:01:43,773
+In class, Lecture mode records the whole lecture with live captions,
+
+22
+00:01:48,556 --> 00:01:51,795
+then turns the transcript into organised notes, spread over new sheets.
+
+23
+00:01:52,575 --> 00:01:56,521
+Your notes stay yours. Export them as PDF, Word or Markdown, any time.
+
+24
+00:01:57,175 --> 00:02:00,414
+Notebook Companion. Just talk, and your notes write themselves.
