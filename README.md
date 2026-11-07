@@ -1,5 +1,7 @@
 # Notebook Companion — voice-first notebook (v2 redesign)
 
+> **📄 Solution pitch (1 page): [PITCH.pdf](PITCH.pdf)** · [read it here](PITCH.md) · **Live:** https://notebook-companion.onrender.com · **Demo video:** [demo-video/notebook-companion-voice.mp4](demo-video/notebook-companion-voice.mp4)
+
 If you still see tabs (My Space / Notes / Companion / Capture…) or an "Image width" toolbar, you are running the OLD folder.
 The new app opens on a page with only: header → **Create new notebook** → **Pinned** → **Recently edited**.
 
@@ -21,7 +23,7 @@ Hard-refresh the browser (Ctrl+Shift+R) after upgrading.
 - **Labelled diagrams:** say "draw a labelled diagram of the heart", or select text → ✦ Visualize → 🏷 Labelled diagram. Heart, animal cell and flower are built in; other subjects are drawn by the AI.
 - **Select text:** floating bar with size, colour, highlight, B/I/U, heading, bullets, ✦ Visualize (Napkin-style diagrams), Ask.
 - **🎓 Study:** quiz, flashcards, and "what did I miss?" generated from your notes (or say "quiz me").
-- **File ▾:** export PDF / Word / Markdown; import a photo or PDF of handwritten notes (AI reads it into sheets). No account needed.
+- **File ▾:** export PDF / Word / Markdown; import a photo or PDF of handwritten notes (AI reads it into sheets). Each person signs in with their own username and password; notebooks are private to their account.
 - **✦ Companion:** reads every sheet, your selection and visuals; replies are spoken.
 See CHANGES.md for details.
 - **✨ First time?** Home → "Start the tour": a 1-minute guided notebook.

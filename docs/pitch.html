@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Notebook Companion: Solution Pitch</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: "Patrick Hand"; src: url("../demo-video/intro-v2/assets/fonts/PatrickHand-Regular.ttf"); }
+  @page { size: A4; margin: 0; }
+  :root { --ink: #2B2B2B; --soft: #5f5f5f; --blue: #3B5BDB; --yellow: #FFE45C; --mint: #C9F2DD; --lav: #D9D2FF; --peach: #FFD9C0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { width: 210mm; height: 297mm; padding: 9.5mm 12mm 7mm; font-family: Inter, "Segoe UI", sans-serif; font-size: 8.5pt; line-height: 1.34; color: var(--ink);
+         background-color: #fff; background-image: linear-gradient(#F3F3F3 1px, transparent 1px), linear-gradient(90deg, #F3F3F3 1px, transparent 1px); background-size: 5mm 5mm; overflow: hidden; }
+  header { display: flex; align-items: flex-end; justify-content: space-between; gap: 6mm; border-bottom: 2px dashed #cfcfcf; padding-bottom: 3mm; margin-bottom: 3.2mm; }
+  h1 { font-family: "Patrick Hand", cursive; font-weight: 400; font-size: 23pt; line-height: 1; margin: 0; }
+  .tag { font-size: 10.5pt; color: var(--blue); font-weight: 700; margin-top: 1.2mm; }
+  .links { text-align: right; font-size: 8.2pt; line-height: 1.55; white-space: nowrap; }
+  .links b { display: inline-block; min-width: 13mm; }
+  a { color: var(--blue); text-decoration: none; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.6mm 4.5mm; }
+  .card { background: rgba(255,255,255,.94); border: 1.6px solid var(--ink); border-radius: 3.5mm 1.5mm 4mm 1.5mm; padding: 2.2mm 3.2mm; }
+  .full { grid-column: 1 / -1; }
+  h2 { font-size: 9.6pt; font-weight: 900; margin: 0 0 1.3mm; display: flex; align-items: center; gap: 1.6mm; }
+  h2 i { font-style: normal; display: inline-grid; place-items: center; width: 5mm; height: 5mm; border: 1.4px solid var(--ink); border-radius: 50%; font-size: 7.5pt; background: var(--yellow); }
+  p { margin: 0 0 1.2mm; }
+  ul { margin: 0; padding-left: 4mm; }
+  li { margin: 0 0 .7mm; }
+  .say { font-family: "Patrick Hand", cursive; font-size: 10pt; background: var(--mint); border-radius: 1.5mm; padding: 0 1.2mm; white-space: nowrap; }
+  table { width: 100%; border-collapse: collapse; font-size: 8.4pt; }
+  td { padding: .9mm 1.6mm; vertical-align: top; border-top: 1px solid #e3e3e3; }
+  tr:first-child td { border-top: 0; }
+  td:first-child { font-weight: 700; width: 30%; }
+  .pill { display: inline-block; border: 1.2px solid var(--ink); border-radius: 3mm; padding: 0 1.8mm; margin: 0 .8mm .9mm 0; font-size: 7.9pt; background: #fff; }
+  .num { font-weight: 900; font-size: 12.5pt; color: var(--blue); }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2mm; margin: .6mm 0 1.6mm; }
+  .stats div { border: 1.2px solid var(--ink); border-radius: 2mm; background: #fff; padding: 1.2mm 1.8mm; line-height: 1.2; font-size: 7.6pt; }
+  .src { font-size: 6.6pt; color: var(--soft); margin-top: 1mm; }
+  footer { margin-top: 2.6mm; font-size: 7.8pt; color: var(--soft); display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>✎ Notebook Companion</h1>
+      <div class="tag">A study notebook you can just talk to, built on Gnani AI</div>
+    </div>
+    <div class="links">
+      <b>Live</b> <a href="https://notebook-companion.onrender.com">notebook-companion.onrender.com</a><br />
+      <b>Code</b> <a href="https://github.com/nagasaiparaksh/notebook-companion-v5">github.com/nagasaiparaksh/notebook-companion-v5</a><br />
+      <b>Demo</b> <a href="https://github.com/nagasaiparaksh/notebook-companion-v5/blob/master/demo-video/notebook-companion-voice.mp4">demo-video/notebook-companion-voice.mp4</a> (3:35)
+    </div>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2><i>1</i>The problem</h2>
+      <ul>
+        <li>Students write while the teacher talks, so they <b>listen less</b> and copy more.</li>
+        <li>Indian classrooms are <b>spoken and code-mixed</b> (Hinglish and more), but note apps are English-first and typing-first.</li>
+        <li>Generic speech tools <b>mishear course terms</b> ("are and ends" for RNNs).</li>
+        <li>Notes stay <b>passive</b>: nothing quizzes you or shows what you missed.</li>
+      </ul>
+    </section>
+    <section class="card">
+      <h2><i>2</i>The solution</h2>
+      <p>A voice-first notebook: <b>tap the mic once and talk</b>. For every sentence the AI decides whether it is dictation, a command or a question, then writes, acts or answers.</p>
+      <p>Students upload their <b>syllabus or slides</b>; from then on recognition, answers, quizzes and "what did I miss?" all follow <i>their</i> course.</p>
+    </section>
+
+    <section class="card full">
+      <h2><i>3</i>Everything by voice</h2>
+      <span class="say">"Plants make glucose from sunlight…"</span> dictation &nbsp;·&nbsp;
+      <span class="say">"Write a summary with a heading and a diagram"</span> &nbsp;·&nbsp;
+      <span class="say">"Change the heading to…"</span> <span class="say">"Undo that"</span> &nbsp;·&nbsp;
+      <span class="say">"Explain my notes simply"</span> spoken answer from your notes &nbsp;·&nbsp;
+      <span class="say">"Add that to my notes"</span> &nbsp;·&nbsp;
+      <span class="say">"Quiz me"</span> <span class="say">"Make flashcards"</span> <span class="say">"What did I miss?"</span> &nbsp;·&nbsp;
+      <span class="say">"Record the lecture"</span> live captions → organised notes &nbsp;·&nbsp;
+      <span class="say">"Photosynthesis में plants…"</span> Hindi + English in one sentence
+    </section>
+
+    <section class="card">
+      <h2><i>4</i>Gnani APIs used</h2>
+      <table>
+        <tr><td>Prisma v3.0 STT (REST)</td><td>Dictation and commands; <b>keyterms, topic, previous_text</b> from the student's course material; code-mixed output</td></tr>
+        <tr><td>Prisma v3.0 Streaming STT</td><td>Live lecture captions over WebSocket, relayed by the server (key never in the browser), with 15-min session rollover</td></tr>
+        <tr><td>Prisma v3.0 Batch STT</td><td>Uploaded lecture recordings with <b>speaker diarization</b> (teacher vs students)</td></tr>
+        <tr><td>Timbre v3.0 TTS (REST + SSE)</td><td>Answers and read-aloud, streaming so speech starts in ~1 s; 13 voices, all supported languages</td></tr>
+      </table>
+    </section>
+    <section class="card">
+      <h2><i>5</i>What makes it different</h2>
+      <ul>
+        <li><b>Syllabus-aware recognition:</b> course terms boost Gnani Prisma; a built-in A/B test shows the difference.</li>
+        <li><b>Code-mixed first:</b> English + 9 Indian languages, mixes of them, or auto-detect.</li>
+        <li><b>Acts, not just transcribes:</b> writes, edits, draws, quizzes, all undoable.</li>
+        <li><b>From passive to active recall:</b> every notebook becomes a quiz, flashcards and a gap check.</li>
+        <li><b>Private:</b> per-user accounts; export to PDF, Word or Markdown.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2><i>6</i>Market &amp; impact <span style="font-weight:400;font-size:7.6pt;color:var(--soft)">(assumptions)</span></h2>
+      <div class="stats">
+        <div><span class="num">4.5 cr</span><br />higher-ed students</div>
+        <div><span class="num">24.7 cr</span><br />school students</div>
+        <div><span class="num">$29B</span><br />India edtech by 2030</div>
+        <div><span class="num">₹53 cr</span><br />/yr at 1% × ₹99/mo</div>
+      </div>
+      <p>If 1% of India's college students paid ₹99/month, that is 4.5 lakh users ≈ ₹53 crore a year, before school and coaching students or college-wide licences. Voice-first also helps learners who write slowly or have motor or visual difficulties.</p>
+      <div class="src">Sources: AISHE 2023-24; UDISE+ 2024-25; IAMAI–Grant Thornton ($7.5B in 2024 → ~$29B by 2030).</div>
+    </section>
+    <section class="card">
+      <h2><i>7</i>Built with</h2>
+      <span class="pill">React + TypeScript + Vite</span><span class="pill">Python Flask</span><span class="pill">SQLite</span><span class="pill">WebSockets</span>
+      <span class="pill">Gemini LLM + automatic fallback</span><span class="pill">RAG over notes &amp; syllabus</span><span class="pill">Docker on Render</span><span class="pill">32 Playwright end-to-end tests</span>
+      <p style="margin-top:1.4mm"><b>Next:</b> Android app with offline drafts, a teacher view that shares a lecture's notes with the whole class, and syllabus packs for common university courses.</p>
+    </section>
+  </div>
+
+  <footer><span>Built by Y Naga Sai Paraksh for the Gnani AI competition</span><span>Try it: sign up in 30 seconds at notebook-companion.onrender.com</span></footer>
+</body>
+</html>
